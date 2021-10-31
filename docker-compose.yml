@@ -5,4 +5,29 @@ services:
     tty: true
     container_name: tts
     volumes:
-        - .:/app
+      - ./shovel:/app
+    #mysqlに依存しているので、mysqlコンテナ作成後、appコンテナが作られる。
+    depends_on:
+      - mariadb
+    links: 
+      - "mariadb:db"
+    env_file:
+     - ./shovel.env
+
+  mariadb:
+    image: mariadb:latest
+    container_name: tts_db
+    env_file: ./mysql/mysql.env
+    #環境変数設定。タイムゾーンを日本時間に設定。
+    environment:
+      - TZ=Asia/Tokyo
+    ports:
+      - '3307:3307'
+    volumes:
+      #mysqlのデフォルト設定ファイルを上書き。:roでコンテナ側からは読み取り専用設定。
+      - ./mysql/conf:/etc/mysql/conf.d/:ro
+      #mysqldataにマウントすることで、コンテナを削除してもデーターは残るように設定。
+      - mysqldata:/var/lib/mysql
+    
+volumes:
+  mysqldata:

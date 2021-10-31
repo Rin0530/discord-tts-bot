@@ -1,8 +1,8 @@
-import { CommandInteraction, GuildMember, MessageEmbed } from "discord.js"
+import { ApplicationCommandData,CommandInteraction, GuildMember, MessageEmbed } from "discord.js"
 import * as voice from "@discordjs/voice"
-import { guildArray,channelArray } from '../voice/wordsQue'
+import { guildArray,playerArray, PLayerOptions } from '../voice/wordsQue'
 
-export const registerJoin = {
+export const registerJoin:ApplicationCommandData = {
     name: "join",
     description: "join your VC",
 }
@@ -46,7 +46,7 @@ export async function join(interaction:CommandInteraction) {
     );
 
     guildArray[guildID] = [];
-    channelArray[guildID] = interaction.channel
+    playerArray[guildID] = new PLayerOptions(interaction.channel, voice.createAudioPlayer())
 
     interaction.reply({
         embeds: [reply]

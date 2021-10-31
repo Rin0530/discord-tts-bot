@@ -10,7 +10,7 @@ const ttsClient = new textToSpeech.TextToSpeechClient({
 
 
 async function textToSpeechReadableStream(element:TextQue) {
-  const text = regrep(element.text);
+  const text = element.text;
   const pitch = element.pitch;
   const request:textToSpeech.protos.google.cloud.texttospeech.v1.ISynthesizeSpeechRequest = {
     input: {text},
@@ -39,7 +39,7 @@ async function textToSpeechReadableStream(element:TextQue) {
 export async function tts(){
   for(let guildID in guildArray){
     const connection = voice.getVoiceConnection(guildID);
-    const player = playerArray[guildID];
+    const player = playerArray[guildID].player;
     if(!connection || !player) continue;
 
     //前回のキュー
@@ -51,10 +51,4 @@ export async function tts(){
     const resource = await textToSpeechReadableStream(lastQue)
     player.play(resource)
   }
-}
-
-function regrep(message:string){
-  let text = message.replace(/'https?:\/\/\S*'/,"");
-  text = text.replace(/'<a?:.*?:\d+>'/,"");
-  return text;
 }

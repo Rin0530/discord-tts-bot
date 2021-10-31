@@ -1,3 +1,5 @@
-/*.json
+*/*.json
 /*.env
-!/package.json
+!*/package.json
+mysql/*
+shovel/node_modules
