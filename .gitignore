@@ -1,0 +1,5 @@
+*.json
+*.env
+*.txt
+!*/package.json
+shovel/node_modules
