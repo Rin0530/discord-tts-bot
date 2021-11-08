@@ -27,7 +27,7 @@ export async function addword(interaction:CommandInteraction) {
     const after = options.getString("after",true);
     if(!guild) return interaction.reply("this command is unable exclude textChannel!")
 
-    await interaction.reply({content:"処理中",ephemeral: true })
+    await interaction.reply("処理中")
 
     const result:boolean|null = await registerWord(guild, before, after);
     const embed = new MessageEmbed({

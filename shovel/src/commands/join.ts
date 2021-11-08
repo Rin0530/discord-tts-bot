@@ -12,7 +12,7 @@ export async function join(interaction:CommandInteraction) {
     const clientUser = interaction.client.user
     const member = interaction.member; 
     const guildID = interaction.guildId
-
+    
     if(!(member instanceof GuildMember)) return interaction.reply("API guild user can not use this command!")
 
     if(interaction.channel?.type != "GUILD_TEXT" || !guildID) return interaction.reply("this command is unable exclude textChannel!")
@@ -53,6 +53,3 @@ export async function join(interaction:CommandInteraction) {
         embeds: [reply]
     })
 }
-//declare type DiscordGatewayAdapterCreator = (methods: DiscordGatewayAdapterLibraryMethods) => DiscordGatewayAdapterImplementerMethods;
-
-//type InternalDiscordGatewayAdapterCreator = (methods: InternalDiscordGatewayAdapterLibraryMethods,) => InternalDiscordGatewayAdapterImplementerMethods;

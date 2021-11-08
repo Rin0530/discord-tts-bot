@@ -54,6 +54,24 @@ export async function getWords(guildId:string):Promise<{[key:string]: string;}> 
     })
 }
 
+export async function deleteWord(guildId:String, word:String):Promise<boolean>{
+    return new Promise(resolve => {
+        pool.getConnection().then(async conn => {
+            const query = `DELETE FROM \`${guildId}\` WHERE \`before\` = \"${word}\"`;
+            conn.query(query)
+            .then(() => {
+                conn.end();
+                resolve(true)
+            })
+            .catch(err => {
+                console.log(err);
+                conn.end();
+                resolve(false)
+            })
+        })
+    })
+}
+
 export async function registerPitch(userId:string, pitch:number):Promise<boolean>{
     return new Promise(resolve => {
         pool.getConnection().then(async conn => {

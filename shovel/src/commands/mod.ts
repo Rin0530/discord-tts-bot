@@ -4,10 +4,11 @@ import * as disconnect from "./disconnect"
 import * as addWord from "./addWord"
 import * as setPitch from "./setPitch"
 import * as list from "./list"
+import * as deleteWord from "./deleteWord"
 
-const processes = [join.join,disconnect.dc,addWord.addword,setPitch.setpitch, list.list];
+const processes = [join.join,disconnect.dc,addWord.addword,setPitch.setpitch, list.list, deleteWord.deleteword];
 
-export const register:Array<ApplicationCommandData> = [join.registerJoin, disconnect.registerDc,addWord.registerAddWord,setPitch.registerSetPitch, list.registerList]
+export const register:Array<ApplicationCommandData> = [join.registerJoin, disconnect.registerDc,addWord.registerAddWord,setPitch.registerSetPitch, list.registerList, deleteWord.registerDeleteWord]
 
 export function commandProcess(interaction:CommandInteraction) {
     const process = processes.find(value => value.name === interaction.commandName);

@@ -52,7 +52,7 @@ async function replace(message:string, guildId:string):Promise<string>{
     return new Promise(resolv => {
         let text = message;
         for(let before in result) 
-            text = text.replace(new RegExp(before), result[before]);
+            text = text.split(before).join(result[before])
         resolv(text);
     })
 }
