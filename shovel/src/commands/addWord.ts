@@ -27,6 +27,9 @@ export async function addword(interaction:CommandInteraction) {
     const after = options.getString("after",true);
     if(!guild) return interaction.reply("this command is unable exclude textChannel!")
 
+    const timeout = setTimeout(() => {
+        interaction.editReply("エラー、やり直してください")
+    }, 5000);
     await interaction.reply("処理中")
 
     const result:boolean|null = await registerWord(guild, before, after);
@@ -50,4 +53,5 @@ export async function addword(interaction:CommandInteraction) {
         ]
     })
     interaction.editReply(result ? {embeds: [embed]} : "エラー");
+    clearTimeout(timeout)
 }
