@@ -30,6 +30,8 @@ export class PLayerOptions{
 }
 
 export async function addQue(message: Message){
+    if(message.content.startsWith(";") || message.content.startsWith("；"))
+        return
     const guildId = message.guildId;
     if(!guildId || (!guildArray[guildId])) return;
     if(message.channel != playerArray[guildId].channel) return;
