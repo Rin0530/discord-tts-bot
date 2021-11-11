@@ -21,7 +21,7 @@ export　async function deleteword(interaction:CommandInteraction){
     if(!guildId) return interaction.reply("this command is unable exclude textChannel!");
     await interaction.reply("処理中");
 
-    const result:boolean = await deleteWord(guildId, word);
+    const result = await deleteWord(guildId, word);
     const embed = new MessageEmbed({
         author: {
             name: clientUser?.username
@@ -34,7 +34,10 @@ export　async function deleteword(interaction:CommandInteraction){
     }else {
         embed.setDescription("エラー");
         embed.setColor("RED");
-        embed.addField(word,"は単語辞書に存在しません");
+        if(result != null)
+            embed.addField(word,"は単語辞書に存在しません");
+        else
+            embed.addField("予期せぬエラー","開発者に問い合わせください");
     }
 
     interaction.editReply({embeds: [embed]});
