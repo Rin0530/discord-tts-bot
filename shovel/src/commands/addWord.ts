@@ -29,7 +29,7 @@ export async function addword(interaction:CommandInteraction) {
 
     const timeout = setTimeout(() => {
         interaction.editReply("エラー、やり直してください")
-    }, 5000);
+    }, 8000);
     await interaction.reply("処理中")
 
     const result:boolean|null = await registerWord(guild, before, after);
