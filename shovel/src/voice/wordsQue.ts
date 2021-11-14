@@ -38,14 +38,15 @@ export async function addQue(message: Message){
     const pitch = await getPitch(message.author.id);
     const secondsPitch = message.author.createdTimestamp %400 /10 -20;
 
-    let text = regrep(message.content);
-    text = await replace(text, guildId);
+    let text = await replace(message.content, guildId);
+    text = regrep(text);
     guildArray[guildId].push(new TextQue(text,pitch != -100? pitch: secondsPitch));
 }
 
 function regrep(message:string){
     let text = message.replace(/'https?:\/\/\S*'/,"");
-    text = text.replace(/'<a?:.*?:\d+>'/,"");
+    text = text.replace(/<a?:.*?:\d+>/,"");
+    text = text.replace(/\p{Emoji_Modifier_Base}\p{Emoji_Modifier}?|\p{Emoji_Presentation}|\p{Emoji}\uFE0F/,"");
     return text;
 }
 
