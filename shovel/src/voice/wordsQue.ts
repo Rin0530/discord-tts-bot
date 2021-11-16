@@ -44,10 +44,9 @@ export async function addQue(message: Message){
 }
 
 function regrep(message:string){
-    let text = message.replace(/https?:\/\/\S*/,"");
-    text = text.replace(/<a?:.*?:\d+>/,"");
-    text = text.replace(/\p{Emoji_Modifier_Base}\p{Emoji_Modifier}?|\p{Emoji_Presentation}|\p{Emoji}\uFE0F/,"");
-    text = text.replace("\([^あ-ん\u30A1-\u30F4\u2E80-\u2FDF\u3005-\u3007\u3400-\u4DBF\u4E00-\u9FFF\uF900-\uFAFF\U00020000-\U0002EBEF]+?\)","")
+    let text = message.replace(/https?:\/\/\S*/,"");    //URLを読み飛ばす
+    text = text.replace(/<a?:.*?:\d+>/,"");     //カスタム絵文字を読み飛ばす
+    text = text.replace(/[^\d\u\lあ-んア-ンｦ-ﾟ\u4E00-\u9FFF]/g,"");      //数字、半角英字、ひらがな、カタカナ、半角カタカナ、漢字以外を読み飛ばす
     return text;
 }
 
