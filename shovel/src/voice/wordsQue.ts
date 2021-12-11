@@ -46,7 +46,7 @@ export async function addQue(message: Message){
 function regrep(message:string){
     let text = message.replace(/https?:\/\/\S*/,"");    //URLを読み飛ばす
     text = text.replace(/<a?:.*?:\d+>/,"");     //カスタム絵文字を読み飛ばす
-    text = text.replace(/[^\d\u\lあ-んア-ンｦ-ﾟ\u4E00-\u9FFF]/g,"");      //数字、半角英字、ひらがな、カタカナ、半角カタカナ、漢字以外を読み飛ばす
+    text = text.replace(/[^\w０-９あ-んア-ンぁ-ょｱ-ﾝｦ-ﾟ\-ー\u4E00-\u9FFF]/g,"");      //数字、半角英字、ひらがな、カタカナ、半角カタカナ、漢字以外を読み飛ばす
     return text;
 }
 
