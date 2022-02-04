@@ -1,10 +1,10 @@
 FROM node:latest
 WORKDIR /app
 
-COPY ./optical-legend-292212-a4b8b442a8ba.json .
+COPY . .
 ENV GOOGLE_APPLICATION_CREDENTIALS ./optical-legend-292212-a4b8b442a8ba.json
 
+RUN touch list.txt
+RUN npm i
 
-#RUN npm i 
-
-CMD bash
+CMD npm start

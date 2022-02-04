@@ -1,6 +1,7 @@
 import { CommandInteraction, GuildMember, MessageEmbed, ApplicationCommandData } from "discord.js"
 import * as voice from "@discordjs/voice"
 import { guildArray, playerArray, PLayerOptions,} from '../voice/wordsQue'
+import { initialize} from '../db/database'
 
 export const registerJoin:ApplicationCommandData = {
     name: "join",
@@ -11,11 +12,11 @@ export const registerJoin:ApplicationCommandData = {
 export async function join(interaction:CommandInteraction) {
     const clientUser = interaction.client.user
     const member = interaction.member; 
-    const guildID = interaction.guildId
+    const guild = interaction.guild
     
     if(!(member instanceof GuildMember)) return interaction.reply("API guild user can not use this command!")
 
-    if(interaction.channel?.type != "GUILD_TEXT" || !guildID) return interaction.reply("this command is unable exclude textChannel!")
+    if(interaction.channel?.type != "GUILD_TEXT" || !guild) return interaction.reply("this command is unable exclude textChannel!")
 
     const textChannelName = interaction.channel.name;
     const VC = member.voice.channel
@@ -46,8 +47,10 @@ export async function join(interaction:CommandInteraction) {
         true
     );
 
-    guildArray[guildID] = [];
-    playerArray[guildID] = new PLayerOptions(interaction.channel, voice.createAudioPlayer()); 
+    guildArray[guild.id] = [];
+    playerArray[guild.id] = new PLayerOptions(interaction.channel, voice.createAudioPlayer()); 
+
+    initialize(guild);
 
     interaction.reply({
         embeds: [reply]

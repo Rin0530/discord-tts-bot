@@ -10,11 +10,7 @@ const pool = mariadb.createPool({
 
 
 export async function registerWord(guild:Guild, before:string, after:string):Promise<boolean>{  
-    const exist = await isExistTable(guild);
-    if(!exist){
-        updateGuildName(guild)
-        await createTable(guild);
-    }
+    initialize(guild)
     return await new Promise((resolve )=> {
         pool.getConnection().then(conn => {
             const query = `INSERT INTO ${conn.escapeId(guild.id)} VALUES (?) ON DUPLICATE KEY UPDATE \`after\` = ?;`;
@@ -131,7 +127,7 @@ async function isExistTable(guild:Guild):Promise<boolean>{
 }
 
 async function createTable(guild:Guild):Promise<number>{
-    return await　new Promise(resoleve => {
+    return await new Promise(resoleve => {
         pool.getConnection().then(conn => {
             const query = `CREATE TABLE ${conn.escapeId(guild.id)} ( \`before\` VARCHAR(255) PRIMARY KEY, \`after\` VARCHAR(255) NOT NULL );`;
             conn.query(query)
@@ -153,4 +149,12 @@ function updateGuildName(guild:Guild){
             .catch(err => console.log(err))
             .finally(() => conn.end())
     })
+}
+
+export async function initialize(guild:Guild){
+    const exist = await isExistTable(guild);
+    if(!exist){
+        updateGuildName(guild)
+        await createTable(guild);
+    }
 }

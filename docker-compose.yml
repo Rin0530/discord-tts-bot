@@ -1,11 +1,11 @@
 version: '3'
 services:
   app:
-    build: .
+    build: ./shovel
     tty: true
     container_name: dev
-    volumes:
-      - ./shovel:/app
+    #volumes:
+    #  - ./shovel:/app
     #mysqlに依存しているので、mysqlコンテナ作成後、appコンテナが作られる。
     depends_on:
       - mariadb
@@ -27,7 +27,9 @@ services:
       #mysqlのデフォルト設定ファイルを上書き。:roでコンテナ側からは読み取り専用設定。
       - ./mysql/conf:/etc/mysql/conf.d/:ro
       #mysqldataにマウントすることで、コンテナを削除してもデーターは残るように設定。
-      - mysqldata:/var/lib/mysql
+      - ./mysqldata:/var/lib/mysql
+      #必要なテーブルを作成するスクリプトを配置
+      - ./mysql/init.d:/docker-entrypoint-initdb.d
     
 volumes:
   mysqldata:
