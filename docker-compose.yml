@@ -12,12 +12,15 @@ services:
     links: 
       - "mariadb:db"
     env_file:
-     - ./shovel.env
+     - ./.env
+    environment:
+      - MARIADB_DATABASE=tts
 
   mariadb:
     image: mariadb:latest
     container_name: dev_db
-    env_file: ./mysql/mysql.env
+    env_file: 
+      - ./.env
     #環境変数設定。タイムゾーンを日本時間に設定。
     environment:
       - TZ=Asia/Tokyo
