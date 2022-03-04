@@ -13,8 +13,8 @@ export async function registerWord(guild:Guild, before:string, after:string):Pro
     initialize(guild)
     return await new Promise((resolve )=> {
         pool.getConnection().then(conn => {
-            const query = `INSERT INTO ${conn.escapeId(guild.id)} VALUES (?) ON DUPLICATE KEY UPDATE \`after\` = ?;`;
-            conn.query(query, [[before, after], after])
+            const query = `INSERT INTO wordsDict VALUES (?) ON DUPLICATE KEY UPDATE \`before\` = ? AND \`guild_id\` = ?;`;
+            conn.query(query, [[before, after, guild.id], after, guild.id])
                 .then(res =>{
                     console.log("query success")
                     console.log(res)
@@ -34,8 +34,8 @@ export async function registerWord(guild:Guild, before:string, after:string):Pro
 export async function getWords(guildId:string):Promise<{[key:string]: string;}> {
     return await new Promise((resolev) => {
         pool.getConnection().then(conn => {
-            const query = `SELECT * FROM ${conn.escapeId(guildId)}`
-            conn.query(query)
+            const query = `SELECT * FROM wordsDict WHERE \`guild_id\` = ?`
+            conn.query(query,guildId)
                 .then(res => {
                     conn.end()
                     //レスポンスをjson形式にパース
@@ -55,8 +55,8 @@ export async function getWords(guildId:string):Promise<{[key:string]: string;}> 
 export async function deleteWord(guildId:string, word:string):Promise<boolean|null>{
     return await new Promise(resolve => {
         pool.getConnection().then(async conn => {
-            const query = `DELETE FROM ${conn.escapeId(guildId)} WHERE \`before\` = ?`;
-            conn.query(query, word)
+            const query = `DELETE FROM wordsDict WHERE (\`before\` = ? AND \`guild_id\` = ?)`;
+            conn.query(query, [word, guildId])
             .then(res => {
                 conn.end();
                 if(res["affectedRows"] >= 1)
@@ -113,10 +113,15 @@ export async function getPitch(userId:string):Promise<number>{
 async function isExistTable(guild:Guild):Promise<boolean>{
     return await new Promise(resolve => {
         pool.getConnection().then(conn =>{
-            const query = `SELECT 1 FROM ${conn.escapeId(guild.id)} LIMIT 1;`
+            const query = `SELECT 1 FROM wordsDict WHERE \`guild_id\` = ?;`
             let bool:boolean;
-            conn.query(query)
-                .then(() => bool = true)
+            conn.query(query, guild.id)
+                .then(res => {
+                    if(res.length >= 1)
+                        bool = true
+                    else
+                        bool = false
+                })
                 .catch(() => bool = false)
                 .finally(() => {
                     conn.end();
@@ -124,22 +129,6 @@ async function isExistTable(guild:Guild):Promise<boolean>{
                 })
         })
     });
-}
-
-async function createTable(guild:Guild):Promise<number>{
-    return await new Promise(resoleve => {
-        pool.getConnection().then(conn => {
-            const query = `CREATE TABLE ${conn.escapeId(guild.id)} ( \`before\` VARCHAR(255) PRIMARY KEY, \`after\` VARCHAR(255) NOT NULL );`;
-            conn.query(query)
-                .then(() => console.log(guild.id))
-                .catch(err => console.log(err))
-                .finally(() => {
-                    conn.end()
-                    resoleve(0)
-                })
-        })
-        
-    })
 }
 
 function updateGuildName(guild:Guild){
@@ -155,6 +144,5 @@ export async function initialize(guild:Guild){
     const exist = await isExistTable(guild);
     if(!exist){
         updateGuildName(guild)
-        await createTable(guild);
     }
 }

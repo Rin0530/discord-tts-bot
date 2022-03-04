@@ -1,6 +1,6 @@
 import { AudioPlayer } from "@discordjs/voice";
 import { Channel, Message } from "discord.js";
-import { getPitch, getWords } from "../db/database";
+import { getPitch, getWords, registerPitch } from "../db/database";
 
 
 export const guildArray:{
@@ -35,12 +35,14 @@ export async function addQue(message: Message){
     const guildId = message.guildId;
     if(!guildId || (!guildArray[guildId])) return;
     if(message.channel != playerArray[guildId].channel) return;
-    const pitch = await getPitch(message.author.id);
-    const secondsPitch = message.author.createdTimestamp %400 /10 -20;
+    const result = await getPitch(message.author.id);
+    const defaultPitch = message.author.createdTimestamp %400 /10 -20
+    if(result == -100)
+        registerPitch(message.author.id, defaultPitch);
 
     let text = await replace(message.content, guildId);
     text = regrep(text);
-    guildArray[guildId].push(new TextQue(text,pitch != -100? pitch: secondsPitch));
+    guildArray[guildId].push(new TextQue(text,result != -100? result: defaultPitch));
 }
 
 function regrep(message:string){
