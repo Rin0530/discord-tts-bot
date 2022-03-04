@@ -1,3 +1,6 @@
+ -- データベース作成
+ CREATE DATABASE IF NOT EXISTS tts;
+
  -- ピッチ管理テーブル
  CREATE TABLE IF NOT EXISTS `tts`.`pitch` (
    `id` CHAR(18) NOT NULL ,

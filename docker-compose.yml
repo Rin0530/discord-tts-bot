@@ -3,7 +3,7 @@ services:
   app:
     build: ./shovel
     tty: true
-    container_name: dev
+    container_name: tts
     #volumes:
     #  - ./shovel:/app
     #mysqlに依存しているので、mysqlコンテナ作成後、appコンテナが作られる。
@@ -18,7 +18,7 @@ services:
 
   mariadb:
     image: mariadb:latest
-    container_name: dev_db
+    container_name: tts_db
     env_file: 
       - ./.env
     #環境変数設定。タイムゾーンを日本時間に設定。
