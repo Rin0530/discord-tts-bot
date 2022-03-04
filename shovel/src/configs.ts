@@ -1,18 +1,22 @@
 export const configs = {
   token: getToken(),
-  guildId: "728459402641670244",
   credential: getCredential()
 }
 
 function getToken():string{
 const token = process.env["TOKEN"]
 if(token) return token;
-  else process.exit(1); 
-
+  else {
+    console.log("TOKEN not found error");
+    process.exit(1);
+  }
 }
 
 function getCredential():string{
   const token = process.env["GOOGLE_APPLICATION_CREDENTIALS"]
 if(token) return token;
-  else process.exit(1); 
+  else {
+    console.log("GOOGLE_APPLICATION_CREDENTIALS not found error");
+    process.exit(1);
+  } 
 }
