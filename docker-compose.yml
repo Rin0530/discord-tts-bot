@@ -4,8 +4,8 @@ services:
     build: ./shovel
     tty: true
     container_name: tts
-    #volumes:
-    #  - ./shovel:/app
+    volumes:
+      - ./shovel:/app
     #mysqlに依存しているので、mysqlコンテナ作成後、appコンテナが作られる。
     depends_on:
       - mariadb
@@ -15,6 +15,7 @@ services:
      - ./.env
     environment:
       - MARIADB_DATABASE=tts
+      - GOOGLE_APPLICATION_CREDENTIALS=./client_secret.json
 
   mariadb:
     image: mariadb:latest

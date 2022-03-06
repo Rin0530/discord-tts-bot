@@ -1,10 +1,8 @@
 FROM node:latest
 WORKDIR /app
 
-COPY . .
-ENV GOOGLE_APPLICATION_CREDENTIALS ./client_secret.json
+COPY ./package.json .
 
-RUN touch list.txt
 RUN npm i
 
-CMD npm start
+ENTRYPOINT [ "bash","./start.sh" ]
