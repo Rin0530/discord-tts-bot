@@ -5,7 +5,7 @@ services:
     tty: true
     container_name: tts
     working_dir: /app
-    entrypoint: ["bash","./start.sh"]
+    entrypoint: ["bash","./docker-entrypoint.sh"]
     volumes:
       - ./shovel:/app
     #mysqlに依存しているので、mysqlコンテナ作成後、appコンテナが作られる。
