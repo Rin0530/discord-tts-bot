@@ -39,7 +39,7 @@ export async function list(interaction:CommandInteraction) {
     await interaction.reply("処理中");
 
     const result = await getWords(guildId);        
-    if(result["before"] === "")
+    if(Object.keys(result).length == 0)
         return interaction.editReply("辞書ファイルは存在しません")
     
     switch(method){
