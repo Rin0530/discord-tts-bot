@@ -10,7 +10,7 @@ const pool = mariadb.createPool({
 
 
 export async function registerWord(guild:Guild, before:string, after:string):Promise<boolean>{  
-    initialize(guild)
+    await initialize(guild)
     return await new Promise((resolve )=> {
         pool.getConnection().then(conn => {
             const query = `INSERT INTO wordsDict VALUES (?) ON DUPLICATE KEY UPDATE \`before\` = ? AND \`guild_id\` = ?;`;
