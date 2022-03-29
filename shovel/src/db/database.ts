@@ -13,8 +13,8 @@ export async function registerWord(guild:Guild, before:string, after:string):Pro
     await initialize(guild)
     return await new Promise((resolve )=> {
         pool.getConnection().then(conn => {
-            const query = `INSERT INTO wordsDict VALUES (?) ON DUPLICATE KEY UPDATE \`before\` = ? AND \`guild_id\` = ?;`;
-            conn.query(query, [[before, after, guild.id], before, guild.id])
+            const query = `INSERT INTO wordsDict VALUES (?) ON DUPLICATE KEY UPDATE \`after\` = ? ;`;
+            conn.query(query, [[before, after, guild.id], after, guild.id])
                 .then(res =>{
                     console.log("query success")
                     console.log(res)

@@ -15,9 +15,10 @@
 
  -- 単語辞書管理テーブル
  CREATE TABLE IF NOT EXISTS `tts`.`wordsDict` (
-   `before` VARCHAR(255) PRIMARY KEY,
+   `before` VARCHAR(255) NOT NULL,
    `after` VARCHAR(255) NOT NULL,
    `guild_id` CHAR(18) NOT NULL ,
+   PRIMARY KEY (`before`,`guild_id`),
    FOREIGN KEY (`guild_id`) 
     REFERENCES `guilds`(`id`)
  );
