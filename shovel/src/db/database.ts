@@ -32,7 +32,7 @@ export async function registerWord(guild:Guild, before:string, after:string):Pro
 }
 
 export async function getWords(guildId:string):Promise<{[key:string]: string;}> {
-    return await new Promise((resolev) => {
+    return await new Promise((resolve) => {
         pool.getConnection().then(conn => {
             const query = `SELECT * FROM wordsDict WHERE \`guild_id\` = ?`
             conn.query(query,guildId)
@@ -41,12 +41,12 @@ export async function getWords(guildId:string):Promise<{[key:string]: string;}> 
                     //レスポンスをjson形式にパース
                     const result:{[key:string]: string;} = {};
                     for(let v of res) result[v.before] = v.after;
-                    resolev(result)
+                    resolve(result)
                 })
                 .catch(err => {
                     console.log(err)
                     conn.end()
-                    resolev({"before":""})
+                    resolve({"before":""})
                 })
         })
     })

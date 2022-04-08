@@ -56,10 +56,10 @@ function regrep(message:string){
 
 async function replace(message:string, guildId:string):Promise<string>{
     const result = await getWords(guildId);
-    return new Promise(resolv => {
+    return new Promise(resolve => {
         let text = message;
         for(let before in result) 
             text = text.split(before).join(result[before])
-        resolv(text);
+        resolve(text);
     })
 }
