@@ -1,7 +1,8 @@
 #!/bin/bash -eu
 
-mysql=( mysql --protocol=socket -uroot -p"${MYSQL_ROOT_PASSWORD}" )
+mysql=( mysql --protocol=socket -uroot -p"${MARIADB_ROOT_PASSWORD}" )
 
 "${mysql[@]}" <<-EOSQL
-    GRANT ALL ON tts.* TO '${MYSQL_USER}'@'%' ;
+    CREATE USER '${MARIADB_USER}'@'%' IDENTIFIED BY '${MARIADB_PASSWORD}';
+    GRANT ALL ON tts.* TO '${MARIADB_USER}'@'%' ;
 EOSQL
