@@ -5,6 +5,7 @@ import { addQue } from './voice/wordsQue'
 import { configs } from './configs'
 import { tts } from './voice/tts'
 import { disconnect } from './voice/disconnection'
+import { registerDeleteWordForGuild } from './commands/deleteWord'
 
 const client = new Client({
   intents : ['GUILDS','GUILD_VOICE_STATES','GUILD_INTEGRATIONS','GUILD_MESSAGES','GUILD_MESSAGE_REACTIONS']
@@ -25,6 +26,13 @@ function isOnlyBot(voiceState:VoiceState){
   }
 }
 
+export async function loadDeleteCommand() {
+  const guilds = client.guilds.cache
+  for(let guild of guilds){    
+    guild[1].commands.create(await registerDeleteWordForGuild(guild[0]))
+  }
+}
+
 client.on('messageCreate', async message => {
   if(message.interaction)
     return;
@@ -35,6 +43,7 @@ client.on('ready', async () => {
   const applicationManager = client.application;
   if(!applicationManager) process.exit(1);
   applicationManager.commands.set(register);
+  loadDeleteCommand()
   console.log("login succeed!")
   
   setInterval(async () => await tts(), 1000)
