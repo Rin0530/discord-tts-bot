@@ -1,5 +1,6 @@
 import { Guild } from "discord.js";
 import * as mariadb from "mariadb";
+import { pitchArray } from "../voice/wordsQue";
 
 const pool = mariadb.createPool({
     host: "mariadb",
@@ -80,6 +81,7 @@ export async function registerPitch(userId:string, pitch:number):Promise<boolean
             conn.query(query, [[userId, pitch.toString()], pitch.toString()])
                 .then(() => {
                     conn.end();
+                    pitchArray[userId] = pitch
                     resolve(true);
                 })
                 .catch(err => {

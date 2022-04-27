@@ -1,5 +1,6 @@
 import { ApplicationCommandData, CommandInteraction, InteractionReplyOptions, MessageEmbed } from "discord.js"
 import * as db from "../db/database"
+import { pitchArray } from "../voice/wordsQue";
 
 export const registerGetPitch:ApplicationCommandData = {
     name: "getpitch",
@@ -25,6 +26,10 @@ export async function getpitch(interaction:CommandInteraction) {
             }
         ]
     });
+
+    interaction.client.users.cache.each( async value => {
+        pitchArray[value.id] = pitch        
+    })
     const replyOption:InteractionReplyOptions = {embeds:[message], ephemeral:true}
     return interaction.reply(replyOption)
 }

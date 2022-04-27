@@ -11,6 +11,10 @@ export const playerArray:{
     [guildID:string]: PLayerOptions
 } = {}
 
+export const pitchArray:{
+    [userId:string]: number
+} = {}
+
 export class TextQue{
     public text:string;
     public pitch:number;
@@ -35,14 +39,16 @@ export async function addQue(message: Message){
     const guildId = message.guildId;
     if(!guildId || (!guildArray[guildId])) return;
     if(message.channel != playerArray[guildId].channel) return;
-    const result = await getPitch(message.author.id);
-    const defaultPitch = message.author.createdTimestamp %400 /10 -20
-    if(result == -100)
-        registerPitch(message.author.id, defaultPitch);
-
+    if(!pitchArray[message.author.id]){
+        const result = await getPitch(message.author.id);
+        const defaultPitch = message.author.createdTimestamp %400 /10 -20
+        await registerPitch(message.author.id, result != -100? result: defaultPitch);
+    }
+    
     let text = await replace(message.content, guildId);
     text = regrep(text);
-    guildArray[guildId].push(new TextQue(text,result != -100? result: defaultPitch));
+    console.log(pitchArray[message.author.id]);
+    guildArray[guildId].push(new TextQue(text,pitchArray[message.author.id]));
 }
 
 function regrep(message:string){
