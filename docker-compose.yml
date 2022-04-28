@@ -27,8 +27,6 @@ services:
     #環境変数設定。タイムゾーンを日本時間に設定。
     environment:
       - TZ=Asia/Tokyo
-    ports:
-      - '3306:3306'
     volumes:
       #mysqlのデフォルト設定ファイルを上書き。:roでコンテナ側からは読み取り専用設定。
       - ./mysql/conf:/etc/mysql/conf.d/:ro
@@ -37,6 +35,3 @@ services:
       #必要なテーブルを作成するスクリプトを配置
       - ./mysql/init.d:/docker-entrypoint-initdb.d
     
-volumes:
-  mysqldata:
-
