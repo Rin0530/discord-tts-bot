@@ -1,7 +1,8 @@
 import { CommandInteraction, GuildMember, MessageEmbed, ApplicationCommandData } from "discord.js"
 import * as voice from "@discordjs/voice"
-import { guildArray, playerArray, PLayerOptions,} from '../voice/wordsQue'
 import { initialize} from '../db/database'
+import { guildArray, playerArray } from "../util/arrays"
+import { PLayerOptions } from "../voice/wordsQue"
 
 export const registerJoin:ApplicationCommandData = {
     name: "join",

@@ -1,6 +1,6 @@
 import { getVoiceConnection } from "@discordjs/voice";
 import { ApplicationCommandData, CommandInteraction } from "discord.js"
-import { disconnect } from "../voice/disconnection";
+import { disconnect } from "../util/disconnection";
 
 export const registerDc:ApplicationCommandData = {
     name: "dc",

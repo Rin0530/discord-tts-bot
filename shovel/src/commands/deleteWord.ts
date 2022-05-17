@@ -1,7 +1,7 @@
 import { ApplicationCommandOptionChoice } from "discord.js/typings"
 import { CommandInteraction, ApplicationCommandData, MessageEmbed } from "discord.js"
 import { deleteWord, getWords } from "../db/database";
-import { loadDeleteCommand } from "../client";
+import { loadDeleteCommand } from "../util/loadDeleteCommand";
 
 export const registerDeleteWord:ApplicationCommandData = {
     name: "deleteword",
@@ -78,5 +78,5 @@ export async function deleteword(interaction:CommandInteraction){
     }
 
     interaction.editReply({embeds: [embed]});
-    loadDeleteCommand()
+    loadDeleteCommand(interaction.client)
 }

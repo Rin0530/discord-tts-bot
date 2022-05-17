@@ -1,6 +1,6 @@
 import { CommandInteraction, ApplicationCommandData, MessageEmbed } from "discord.js"
-import { loadDeleteCommand } from "../client";
 import { registerWord } from "../db/database";
+import { loadDeleteCommand } from "../util/loadDeleteCommand";
 
 export const registerAddWord:ApplicationCommandData = {
     name: "addword",
@@ -55,5 +55,5 @@ export async function addword(interaction:CommandInteraction) {
     })
     interaction.editReply(result ? {embeds: [embed]} : "エラー");
     clearTimeout(timeout)
-    loadDeleteCommand()
+    loadDeleteCommand(interaction.client)
 }

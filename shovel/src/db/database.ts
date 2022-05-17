@@ -1,6 +1,6 @@
 import { Guild } from "discord.js";
 import * as mariadb from "mariadb";
-import { pitchArray } from "../voice/wordsQue";
+import { pitchArray } from "../util/arrays";
 
 const pool = mariadb.createPool({
     host: "mariadb",

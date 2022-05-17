@@ -14,7 +14,7 @@ if(token) return token;
 
 function getCredential():string{
   const token = process.env["GOOGLE_APPLICATION_CREDENTIALS"]
-if(token) return token;
+  if(token) return token;
   else {
     console.log("GOOGLE_APPLICATION_CREDENTIALS not found error");
     process.exit(1);

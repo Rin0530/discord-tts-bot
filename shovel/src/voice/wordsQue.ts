@@ -1,19 +1,7 @@
 import { AudioPlayer } from "@discordjs/voice";
 import { Channel, Message } from "discord.js";
 import { getPitch, getWords, registerPitch } from "../db/database";
-
-
-export const guildArray:{
-    [guildId:string]: TextQue[]
-} = {}
-
-export const playerArray:{
-    [guildID:string]: PLayerOptions
-} = {}
-
-export const pitchArray:{
-    [userId:string]: number
-} = {}
+import { guildArray, pitchArray, playerArray } from "../util/arrays";
 
 export class TextQue{
     public text:string;
@@ -47,7 +35,6 @@ export async function addQue(message: Message){
     
     let text = await replace(message.content, guildId);
     text = regrep(text);
-    console.log(pitchArray[message.author.id]);
     guildArray[guildId].push(new TextQue(text,pitchArray[message.author.id]));
 }
 
