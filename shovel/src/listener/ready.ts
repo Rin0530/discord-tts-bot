@@ -8,6 +8,12 @@ export async function ready(client:Client){
     if(!applicationManager) process.exit(1);
     applicationManager.commands.set(register);
     loadDeleteCommand(client)
+    client.user?.setActivity(
+        "/helpでコマンド一覧表示",
+        {
+          type: "PLAYING"
+        }
+      )
     console.log("login succeed!")
 
     setInterval(async () => await tts(), 1000)
