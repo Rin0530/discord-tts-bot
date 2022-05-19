@@ -6,15 +6,17 @@ import * as setPitch from "./setPitch"
 import * as list from "./list"
 import * as deleteWord from "./deleteWord"
 import * as getpitch from "./getPitch"
+import * as help from "./help"
 
-const processes = [
+const commands = [
     join.join,
     disconnect.dc,
     addWord.addword,
     setPitch.setpitch,
     list.list,
     deleteWord.deleteword,
-    getpitch.getpitch
+    getpitch.getpitch,
+    help.help
 ];
 
 export const register:Array<ApplicationCommandData> = [
@@ -24,11 +26,12 @@ export const register:Array<ApplicationCommandData> = [
     setPitch.registerSetPitch,
     list.registerList,
     deleteWord.registerDeleteWord,
-    getpitch.registerGetPitch
+    getpitch.registerGetPitch,
+    help.registerHelp
 ]
 
 export function commandProcess(interaction:CommandInteraction) {
-    const process = processes.find(value => value.name === interaction.commandName);
+    const process = commands.find(value => value.name === interaction.commandName);
     if(!process) 
         return interaction.reply(`${interaction.commandName} was not found`);
     else 

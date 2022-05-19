@@ -47,6 +47,9 @@ export async function join(interaction:CommandInteraction) {
         "で読み上げます",
         true
     );
+    reply.setFooter({
+        text: "/helpでコマンド一覧を表示できます"
+    })
 
     guildArray[guild.id] = [];
     playerArray[guild.id] = new PLayerOptions(interaction.channel, voice.createAudioPlayer()); 
