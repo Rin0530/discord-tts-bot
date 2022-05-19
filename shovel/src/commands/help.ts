@@ -10,7 +10,7 @@ export async function help(interaction:CommandInteraction){
     const client = interaction.client
     const commands = client.application?.commands.cache
     const guildCommands = interaction.guild?.commands.cache.first()
-    if(!commands || !guildCommands) return interaction.reply("コマンドは存在しません")
+    if(!commands) return interaction.reply("コマンドは存在しません")
 
     const embeds:MessageEmbed = new MessageEmbed({
         author: {
@@ -24,7 +24,8 @@ export async function help(interaction:CommandInteraction){
         embeds.addField(command[1].name,`\`${command[1].description}\``,false)
     }
 
-    embeds.addField(guildCommands.name, `\`${guildCommands.description}\``, false)
+    if(guildCommands != undefined)
+        embeds.addField(guildCommands.name, `\`${guildCommands.description}\``, false)
 
     interaction.reply({embeds:[embeds], ephemeral: true})
 }
