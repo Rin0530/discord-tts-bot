@@ -1,7 +1,7 @@
 version: '3'
 services:
   app:
-    image: node
+    image: node:17-bullseye
     tty: true
     container_name: tts
     working_dir: /app
@@ -20,7 +20,7 @@ services:
       - GOOGLE_APPLICATION_CREDENTIALS=./client_secret.json
 
   mariadb:
-    image: mariadb:latest
+    image: mariadb:focal
     container_name: tts_db
     env_file: 
       - ./.env
