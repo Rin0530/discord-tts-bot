@@ -18,6 +18,7 @@ services:
     environment:
       - MARIADB_DATABASE=tts
       - GOOGLE_APPLICATION_CREDENTIALS=./client_secret.json
+    restart: on-failure
 
   mariadb:
     image: mariadb:focal
