@@ -1,4 +1,4 @@
-import { Client, Interaction } from 'discord.js'
+import { Client,  Interaction,VoiceState } from 'discord.js'
 import { configs } from './configs'
 import { ready, onMessageCreate, onInteraction,  onVoiceStateUpdate} from './listener/mod'
 
