@@ -1,4 +1,4 @@
-import { Client } from "discord.js";
+import { ActivityOptions, ActivityType, Client } from "discord.js";
 import { register } from "../commands/mod";
 import { loadDeleteCommand } from "../util/loadDeleteCommand";
 import { tts } from "../voice/tts";
@@ -11,7 +11,7 @@ export async function ready(client:Client){
     client.user?.setActivity(
         "/helpでコマンド一覧表示",
         {
-          type: "PLAYING"
+          type: ActivityType.Playing
         }
       )
     console.log("login succeed!")
