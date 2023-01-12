@@ -1,4 +1,3 @@
-import { ApplicationCommandOptionChoice } from "discord.js/typings"
 import { CommandInteraction, ApplicationCommandData, MessageEmbed } from "discord.js"
 import { deleteWord, getWords } from "../db/database";
 import { loadDeleteCommand } from "../util/loadDeleteCommand";

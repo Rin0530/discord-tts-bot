@@ -24,7 +24,9 @@ export async function join(interaction:CommandInteraction) {
     
     if(!VC?.joinable) return interaction.reply("You have to connect any VC!!")
     
-    voice.joinVoiceChannel({
+    await interaction.reply("接続中")
+
+    const conn = voice.joinVoiceChannel({
         channelId: VC.id,
         guildId: VC.guildId,
         adapterCreator: VC.guild.voiceAdapterCreator as voice.DiscordGatewayAdapterCreator
@@ -56,7 +58,11 @@ export async function join(interaction:CommandInteraction) {
 
     initialize(guild);
 
-    interaction.reply({
-        embeds: [reply]
-    })
+    if(conn){
+        interaction.editReply({
+            embeds: [reply]
+        })
+    }else {
+        interaction.editReply("エラー")
+    }
 }
