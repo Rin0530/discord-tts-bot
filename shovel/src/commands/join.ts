@@ -1,4 +1,11 @@
-import { CommandInteraction, GuildMember, MessageEmbed, ApplicationCommandData } from "discord.js"
+import { 
+    CommandInteraction,
+    Colors,
+    ChannelType,
+    GuildMember,
+    EmbedBuilder,
+    ApplicationCommandData
+} from "discord.js"
 import * as voice from "@discordjs/voice"
 import { initialize} from '../db/database'
 import { guildArray, playerArray } from "../util/arrays"
@@ -17,7 +24,7 @@ export async function join(interaction:CommandInteraction) {
     
     if(!(member instanceof GuildMember)) return interaction.reply("API guild user can not use this command!")
 
-    if(interaction.channel?.type != "GUILD_TEXT" || !guild) return interaction.reply("this command is unable exclude textChannel!")
+    if(interaction.channel?.type != ChannelType.GuildText || !guild) return interaction.reply("this command is unable exclude textChannel!")
 
     const textChannelName = interaction.channel.name;
     const VC = member.voice.channel
@@ -31,26 +38,28 @@ export async function join(interaction:CommandInteraction) {
         guildId: VC.guildId,
         adapterCreator: VC.guild.voiceAdapterCreator as voice.DiscordGatewayAdapterCreator
     })
-    const reply:MessageEmbed = new MessageEmbed({
+
+    const reply = new EmbedBuilder({
         author: {
             name: clientUser?.username
         },
         description: "`接続を完了しました。読み上げを開始します`",
-        color: "GREEN",           
-    })
-    
-    reply.addField(
-        `${textChannelName}チャンネル`,
-        "のテキストを",
-        true
-    );
-    reply.addField(
-        `\`${VC.name}\``,
-        "で読み上げます",
-        true
-    );
-    reply.setFooter({
-        text: "/helpでコマンド一覧を表示できます"
+        color: Colors.Green, 
+        fields: [
+            {
+                name: `${textChannelName}チャンネル`,
+                value: "のテキストを",
+                inline: true
+            },
+            {
+                name: `\`${VC.name}\``,
+                value: "で読み上げます",
+                inline: true
+            } 
+        ],
+        footer: {
+            text: "/helpでコマンド一覧を表示できます"
+        }
     })
 
     guildArray[guild.id] = [];
@@ -58,11 +67,8 @@ export async function join(interaction:CommandInteraction) {
 
     initialize(guild);
 
-    if(conn){
-        interaction.editReply({
-            embeds: [reply]
-        })
-    }else {
+    if(conn)
+        interaction.editReply({embeds: [reply]})
+    else 
         interaction.editReply("エラー")
-    }
 }

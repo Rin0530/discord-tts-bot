@@ -34,6 +34,7 @@ async function textToSpeechReadableStream(element:TextQue) {
     {
       inlineVolume:true,
       inputType: voice.StreamType.OggOpus,
+      metadata: Date.now()
     });
 }
 
@@ -42,10 +43,11 @@ export async function tts(){
     const connection = voice.getVoiceConnection(guildID);
     const player = playerArray[guildID]?.player;
     if(!connection || !player) return;
-
+    
     //前回のキュー
     const lastQue = guildArray[guildID][0];
-    if(!lastQue || player.state.status == voice.AudioPlayerStatus.Playing) return;
+    //if(!lastQue || player.state.status == voice.AudioPlayerStatus.Playing) return;
+    if(!lastQue) return;
     guildArray[guildID].shift();
 
     connection.subscribe(player);

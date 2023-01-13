@@ -1,4 +1,4 @@
-import { ApplicationCommandData, CommandInteraction, InteractionReplyOptions, MessageEmbed } from "discord.js"
+import { ApplicationCommandData, Colors, CommandInteraction, InteractionReplyOptions, EmbedBuilder } from "discord.js"
 import * as db from "../db/database"
 import { pitchArray } from "../util/arrays";
 
@@ -13,11 +13,11 @@ export async function getpitch(interaction:CommandInteraction) {
     const result = await db.getPitch(sender.id);
     const pitch = result == -100 ? sender.createdTimestamp %400 /10 -20 : result;
     
-    const message = new MessageEmbed({
+    const message = new EmbedBuilder({
         author: {
             name: interaction.client.user?.username
         },
-        color: "DARK_BLUE",
+        color: Colors.DarkBlue,
         fields: [
             {
                 name: "あなたのテキストは",

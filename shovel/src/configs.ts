@@ -1,11 +1,12 @@
 export const configs = {
   token: getToken(),
-  credential: getCredential()
+  credential: getCredential(),
+  db_env: getDBENV()
 }
 
 function getToken():string{
-const token = process.env["TOKEN"]
-if(token) return token;
+  const token = process.env["TOKEN"]
+  if(token) return token;
   else {
     console.log("TOKEN not found error");
     process.exit(1);
@@ -20,3 +21,19 @@ function getCredential():string{
     process.exit(1);
   } 
 }
+
+function getDBENV() {
+  const user = process.env["MARIADB_USER"];
+  const passwd = process.env["MARIADB_PASSWORD"];
+  const database = process.env["MARIADB_DATABASE"];
+  if(!user || !passwd || !database){
+    console.log("DB envs not found error");
+    process.exit(1);
+  }
+  return {
+    user: user,
+    password: passwd,
+    database: database
+  } as const
+}
+

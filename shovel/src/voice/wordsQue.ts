@@ -35,6 +35,7 @@ export async function addQue(message: Message){
     
     let text = await replace(message.content, guildId);
     text = regrep(text);
+    
     guildArray[guildId].push(new TextQue(text,pitchArray[message.author.id]));
 }
 

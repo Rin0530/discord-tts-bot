@@ -1,12 +1,14 @@
 import { Guild } from "discord.js";
 import * as mariadb from "mariadb";
 import { pitchArray } from "../util/arrays";
+import { configs } from "../configs"
 
 const pool = mariadb.createPool({
     host: "mariadb",
-    user: process.env["MARIADB_USER"],
-    password: process.env["MARIADB_PASSWORD"],
-    database: process.env["MARIADB_DATABASE"]
+    user: configs.db_env.user,
+    password: configs.db_env.password,
+    database: configs.db_env.database,
+    leakDetectionTimeout: 100
 });
 
 

@@ -1,4 +1,11 @@
-import { ApplicationCommandData, CommandInteraction, InteractionReplyOptions, MessageEmbed } from "discord.js";
+import { 
+    ApplicationCommandData,
+    Colors,
+    CommandInteraction,
+    EmbedBuilder ,
+    InteractionReplyOptions
+} from "discord.js";
+import { ApplicationCommandOptionType } from "discord-api-types/v10"
 import { registerPitch } from "../db/database";
 
 export const registerSetPitch:ApplicationCommandData = {
@@ -8,7 +15,7 @@ export const registerSetPitch:ApplicationCommandData = {
         {
             name: "pitch",
             description: "set between -20.0 and 20.0",
-            type: "NUMBER",
+            type: ApplicationCommandOptionType.Number,
             required: true
         }
     ]
@@ -19,17 +26,17 @@ export async function setpitch(interaction:CommandInteraction){
     if(!member) return interaction.reply("API guild user can not use this command!");
 
     const userId = member.user.id;
-    const pitch = interaction.options.getNumber("pitch",true);
-
+    const pitch = interaction.options.get("pitch",true).value;
+    if(!pitch) return
     if(pitch < -20 || pitch > 20)
         return interaction.reply("The pitch must range between -20.0 and 20.0.");
     
-    const result = await registerPitch(userId, pitch);
-    const success = new MessageEmbed({
+    const result = await registerPitch(userId, parseFloat(pitch.toString()));
+    const success = new EmbedBuilder({
         author: {
             name: interaction.client.user?.username
         },description: "pitchの設定が完了しました",
-        color: "GREEN",
+        color: Colors.Green,
         fields: [
             {
                 name: member.user.username+"のピッチを",
@@ -38,11 +45,11 @@ export async function setpitch(interaction:CommandInteraction){
             
         ]
     });
-    const failed = new MessageEmbed({
+    const failed = new EmbedBuilder({
         author: {
             name: interaction.client.user?.username
         },description: "pitchの設定に失敗しました",
-        color: "GREEN",
+        color: Colors.Green,
         fields: [
             {
                 name: "ピッチの設定に失敗しました。",

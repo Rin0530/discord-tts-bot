@@ -1,4 +1,5 @@
-import { ApplicationCommandData, CommandInteraction } from "discord.js/typings/index.js"
+import { ApplicationCommandData, Colors, CommandInteraction } from "discord.js"
+import { ApplicationCommandOptionType } from "discord-api-types/v10";
 import { createWriteStream } from "fs"
 import { getWords } from "../db/database";
 
@@ -14,7 +15,7 @@ export const registerList:ApplicationCommandData = {
         {
             name: "method",
             description: "TransmissionMethod",
-            type: "STRING",
+            type: ApplicationCommandOptionType.String,
             required: true,
             choices: [
                 {
@@ -32,9 +33,10 @@ export const registerList:ApplicationCommandData = {
 
 export async function list(interaction:CommandInteraction) {
     const guildId = interaction.guildId;
-    const method = interaction.options.getString("method", true)
+    const method = interaction.options.get("method", true).value
     if(!guildId)
         return interaction.reply("this command is unable exclude textChannel!");
+    if(!method) return
     
     await interaction.reply("処理中");
 

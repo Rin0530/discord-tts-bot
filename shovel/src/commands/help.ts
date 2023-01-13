@@ -1,4 +1,4 @@
-import { MessageEmbed, ApplicationCommandData, CommandInteraction, EmbedField } from "discord.js"
+import { ApplicationCommandData, Colors, CommandInteraction, EmbedBuilder } from "discord.js"
 
 export const registerHelp:ApplicationCommandData = {
     name: "help",
@@ -12,20 +12,32 @@ export async function help(interaction:CommandInteraction){
     const guildCommands = interaction.guild?.commands.cache.first()
     if(!commands) return interaction.reply("コマンドは存在しません")
 
-    const embeds:MessageEmbed = new MessageEmbed({
+    const embeds = new EmbedBuilder({
         author: {
             name: client.user?.username
         },
         description: "コマンド一覧",
-        color: "YELLOW",
+        color: Colors.Yellow,
     })
     
     for(let command of commands){
-        embeds.addField(command[1].name,`\`${command[1].description}\``,false)
+        embeds.addFields(
+            {
+                name: command[1].name,
+                value: `\`${command[1].description}\``,
+                inline: false
+            }
+        )
     }
 
     if(guildCommands != undefined)
-        embeds.addField(guildCommands.name, `\`${guildCommands.description}\``, false)
+        embeds.addFields(
+            {
+                name:guildCommands.name,
+                value: `\`${guildCommands.description}\``,
+                inline: false
+            }
+        )
 
     interaction.reply({embeds:[embeds], ephemeral: true})
 }
