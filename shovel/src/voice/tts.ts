@@ -4,7 +4,6 @@ import * as textToSpeech from '@google-cloud/text-to-speech'
 import { configs } from '../configs'
 import { TextQue } from "./wordsQue";
 import { guildArray, playerArray } from "../util/arrays";
-import { time } from "discord.js";
 
 const ttsClient = new textToSpeech.TextToSpeechClient({
     keyFilename: configs.credential
@@ -35,7 +34,7 @@ async function textToSpeechReadableStream(element:TextQue) {
     {
       inlineVolume:true,
       inputType: voice.StreamType.OggOpus,
-      metadata: time()
+      metadata: Date.now()
     });
 }
 
@@ -44,7 +43,7 @@ export async function tts(){
     const connection = voice.getVoiceConnection(guildID);
     const player = playerArray[guildID]?.player;
     if(!connection || !player) return;
-
+    
     //前回のキュー
     const lastQue = guildArray[guildID][0];
     //if(!lastQue || player.state.status == voice.AudioPlayerStatus.Playing) return;

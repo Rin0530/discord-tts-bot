@@ -31,35 +31,35 @@ export async function join(interaction:CommandInteraction) {
     
     if(!VC?.joinable) return interaction.reply("You have to connect any VC!!")
     
-    voice.joinVoiceChannel({
+    await interaction.reply("接続中")
+
+    const conn = voice.joinVoiceChannel({
         channelId: VC.id,
         guildId: VC.guildId,
         adapterCreator: VC.guild.voiceAdapterCreator as voice.DiscordGatewayAdapterCreator
     })
+
     const reply = new EmbedBuilder({
         author: {
             name: clientUser?.username
         },
         description: "`接続を完了しました。読み上げを開始します`",
-        color: Colors.Green,           
-    })
-    
-    reply.addFields(
-        {
-            name: `${textChannelName}チャンネル`,
-            value: "のテキストを",
-            inline: true
-        },
-        {
-            name: `\`${VC.name}\``,
-            value: "で読み上げます",
-            inline: true
-        }        
-        
-    );
-
-    reply.setFooter({
-        text: "/helpでコマンド一覧を表示できます"
+        color: Colors.Green, 
+        fields: [
+            {
+                name: `${textChannelName}チャンネル`,
+                value: "のテキストを",
+                inline: true
+            },
+            {
+                name: `\`${VC.name}\``,
+                value: "で読み上げます",
+                inline: true
+            } 
+        ],
+        footer: {
+            text: "/helpでコマンド一覧を表示できます"
+        }
     })
 
     guildArray[guild.id] = [];
@@ -67,7 +67,8 @@ export async function join(interaction:CommandInteraction) {
 
     initialize(guild);
 
-    interaction.reply({
-        embeds: [reply]
-    })
+    if(conn)
+        interaction.editReply({embeds: [reply]})
+    else 
+        interaction.editReply("エラー")
 }
