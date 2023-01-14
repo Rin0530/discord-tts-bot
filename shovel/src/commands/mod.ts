@@ -25,7 +25,6 @@ export const register:Array<ApplicationCommandData> = [
     addWord.registerAddWord,
     setPitch.registerSetPitch,
     list.registerList,
-    deleteWord.registerDeleteWord,
     getpitch.registerGetPitch,
     help.registerHelp
 ]

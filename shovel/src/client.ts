@@ -14,7 +14,7 @@ client.on("interactionCreate", (interaction:Interaction) => onInteraction(intera
 
 client.on("voiceStateUpdate",(oldState:VoiceState, newState:VoiceState) =>onVoiceStateUpdate(oldState, newState))
 
-client.on("error",error => {
+client.on("error",error => {  
   console.log(error.message);
   process.exit(1)
 })

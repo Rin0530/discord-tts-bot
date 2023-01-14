@@ -34,12 +34,11 @@ export async function addword(interaction:CommandInteraction) {
     const after = options.get("after",true).value;
     if(!guild) return interaction.reply("this command is unable exclude textChannel!")
 
-    const timeout = setTimeout(() => {
-        interaction.editReply("エラー、やり直してください")
-    }, 8000);
     await interaction.reply("処理中")
+
     if(!before || !after) return
-    const result:boolean|null = await registerWord(guild, before.toString(), after.toString());
+
+    const result:boolean = await registerWord(guild, before.toString(), after.toString());
     const embed = new EmbedBuilder({
         author: {
             name: clientUser?.username
@@ -60,6 +59,6 @@ export async function addword(interaction:CommandInteraction) {
         ]
     })
     interaction.editReply(result ? {embeds: [embed]} : "エラー");
-    clearTimeout(timeout)
+    
     loadDeleteCommand(interaction.client)
 }

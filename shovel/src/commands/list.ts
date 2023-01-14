@@ -16,7 +16,7 @@ export const registerList:ApplicationCommandData = {
             name: "method",
             description: "TransmissionMethod",
             type: ApplicationCommandOptionType.String,
-            required: true,
+            required: false,
             choices: [
                 {
                     name: METHOD.codeBlock,
@@ -33,10 +33,10 @@ export const registerList:ApplicationCommandData = {
 
 export async function list(interaction:CommandInteraction) {
     const guildId = interaction.guildId;
-    const method = interaction.options.get("method", true).value
+    const option = interaction.options.get("method",false)
+    const method = option?.value ? option.value : METHOD.codeBlock
     if(!guildId)
         return interaction.reply("this command is unable exclude textChannel!");
-    if(!method) return
     
     await interaction.reply("処理中");
 
@@ -59,7 +59,5 @@ export async function list(interaction:CommandInteraction) {
             stream.end("\n")
             interaction.editReply({files: ["./list.txt"]})
             break;
-        default:
-            interaction.editReply("送信方法を指定してください")
     }    
 }

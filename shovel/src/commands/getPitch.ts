@@ -4,8 +4,7 @@ import { pitchArray } from "../util/arrays";
 
 export const registerGetPitch:ApplicationCommandData = {
     name: "getpitch",
-    description: "send Your Pitch",
-    options: []
+    description: "send Your Pitch"
 }
 
 export async function getpitch(interaction:CommandInteraction) {

@@ -23,17 +23,17 @@ function getCredential():string{
 }
 
 function getDBENV() {
-  const user = process.env["MARIADB_USER"];
-  const passwd = process.env["MARIADB_PASSWORD"];
-  const database = process.env["MARIADB_DATABASE"];
-  if(!user || !passwd || !database){
+  const url = process.env["PROJECT_URL"];
+  const api_key = process.env["API_KEY"]
+  if(!url || !api_key){
+    console.log(url,api_key);
+    
     console.log("DB envs not found error");
     process.exit(1);
   }
   return {
-    user: user,
-    password: passwd,
-    database: database
+    url: url,
+    api_key: api_key
   } as const
 }
 

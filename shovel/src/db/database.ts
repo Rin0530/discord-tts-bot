@@ -1,152 +1,80 @@
-import { Guild } from "discord.js";
-import * as mariadb from "mariadb";
-import { pitchArray } from "../util/arrays";
-import { configs } from "../configs"
+import { createClient } from '@supabase/supabase-js'
+import { Database } from './models'
+import { Guild } from 'discord.js'
+import { configs } from '../configs'
+import { pitchArray } from '../util/arrays'
 
-const pool = mariadb.createPool({
-    host: "mariadb",
-    user: configs.db_env.user,
-    password: configs.db_env.password,
-    database: configs.db_env.database,
-    leakDetectionTimeout: 100
-});
+// Create a single supabase client for interacting with your database
+const client = createClient<Database>(configs.db_env.url, configs.db_env.api_key)
 
-
-export async function registerWord(guild:Guild, before:string, after:string):Promise<boolean>{  
-    await initialize(guild)
-    return await new Promise((resolve )=> {
-        pool.getConnection().then(conn => {
-            const query = `INSERT INTO wordsDict VALUES (?) ON DUPLICATE KEY UPDATE \`after\` = ? ;`;
-            conn.query(query, [[before, after, guild.id], after, guild.id])
-                .then(res =>{
-                    console.log("query success")
-                    console.log(res)
-                    conn.end()
-                    resolve(true);
-                })
-                .catch(err => {
-                    console.log("query failed")
-                    console.log(err)
-                    conn.end()
-                    resolve(false)
-                })
-        });
-    });
+export async function registerWord(guild:Guild, before:string, after:string):Promise<boolean> {
+    const table = client.from('wordsdict');
+    const { data, error } = await table.upsert(
+        {
+            before: before,
+            after: after,
+            guild_id: guild.id
+        },
+        {
+            onConflict: "before,guild_id"
+        }
+    ).select()
+    
+    return !!data
 }
 
-export async function getWords(guildId:string):Promise<{[key:string]: string;}> {
-    return await new Promise((resolve) => {
-        pool.getConnection().then(conn => {
-            const query = `SELECT * FROM wordsDict WHERE \`guild_id\` = ?`
-            conn.query(query,guildId)
-                .then(res => {
-                    conn.end()
-                    //レスポンスをjson形式にパース
-                    const result:{[key:string]: string;} = {};
-                    for(let v of res) result[v.before] = v.after;
-                    resolve(result)
-                })
-                .catch(err => {
-                    console.log(err)
-                    conn.end()
-                    resolve({"before":""})
-                })
-        })
-    })
+export async function getWords(guildId:string): Promise<{[key:string]: string;}> {
+    const table = client.from('wordsdict');
+    const { data, error } = await table.select()
+        //.eq('guild_id', guildId)
+    
+    if(data){
+        const result:{[key:string]: string;} = {};
+        for(const v of data){
+            if(v.guild_id == guildId)
+                result[v.before] = v.after;
+        }
+        return result
+    }else
+        return {}
 }
 
-export async function deleteWord(guildId:string, word:string):Promise<boolean|null>{
-    return await new Promise(resolve => {
-        pool.getConnection().then(async conn => {
-            const query = `DELETE FROM wordsDict WHERE (\`before\` = ? AND \`guild_id\` = ?)`;
-            conn.query(query, [word, guildId])
-            .then(res => {
-                conn.end();
-                if(res["affectedRows"] >= 1)
-                    resolve(true)
-                else
-                    resolve(false)
-            })
-            .catch(err => {
-                console.log(err);
-                conn.end();
-                resolve(null)
-            })
-        })
-    })
+export async function deleteWord(guildId:string, word:string):Promise<boolean>{
+    const table = client.from('wordsdict');
+    const { data, error } = await table.delete()
+        .eq("guild_id",guildId)
+        .eq('before',word)
+        .select()
+    return !!data
 }
 
 export async function registerPitch(userId:string, pitch:number):Promise<boolean>{
-    return await new Promise(resolve => {
-        pool.getConnection().then(async conn => {
-            const query = "INSERT INTO pitch VALUES (?) ON DUPLICATE KEY UPDATE pitch = ?";
-            conn.query(query, [[userId, pitch.toString()], pitch.toString()])
-                .then(() => {
-                    conn.end();
-                    pitchArray[userId] = pitch
-                    resolve(true);
-                })
-                .catch(err => {
-                    console.log(err);
-                    conn.end();
-                    resolve(false);
-                })
-        });
-    })
+    const table = client.from('pitch');
+    const { data, error } = await table.upsert(
+        {
+            id: userId,
+            pitch: pitch
+        },
+        {
+            onConflict: "id"
+        }
+    ).select()
+    
+    if(!error)
+        pitchArray[userId] = pitch
+
+    return !!data
 }
 
-export async function getPitch(userId:string):Promise<number>{
-    return await new Promise(resolve => {
-        pool.getConnection().then(conn => {
-            const query = "SELECT pitch FROM pitch WHERE id = ?"
-            conn.query(query, userId)
-                .then(res => {
-                    const pitch:number = res[0]["pitch"];
-                    conn.end();
-                    resolve(pitch);
-                })
-                .catch(err => {
-                    console.log(err);
-                    conn.end();
-                    resolve(-100);
-                })
-        })
-    })
-}
-
-async function isExistTable(guild:Guild):Promise<boolean>{
-    return await new Promise(resolve => {
-        pool.getConnection().then(conn =>{
-            const query = `SELECT 1 FROM wordsDict WHERE \`guild_id\` = ?;`
-            let bool:boolean;
-            conn.query(query, guild.id)
-                .then(res => {
-                    if(res.length >= 1)
-                        bool = true
-                    else
-                        bool = false
-                })
-                .catch(() => bool = false)
-                .finally(() => {
-                    conn.end();
-                    resolve(bool)
-                })
-        })
-    });
-}
-
-function updateGuildName(guild:Guild){
-    pool.getConnection().then(conn => {
-        const query = "INSERT INTO guilds VALUES (?) ON DUPLICATE KEY UPDATE id = ?";
-        conn.query(query, [[guild.id, guild.name], guild.id] )
-            .catch(err => console.log(err))
-            .finally(() => conn.end())
-    })
-}
-
-export async function initialize(guild:Guild){
-    const exist = await isExistTable(guild);
-    if(!exist){
-        updateGuildName(guild)
+export async function getPitch(userId:string): Promise<number> {
+    const table = client.from("pitch");
+    const { data, error } = await table.select()
+        //.eq('id',userId)
+        
+    if(data){
+        const res = data.find(row => row.id == userId)
+        return res?.pitch || -100
     }
+    else
+        return -100
 }

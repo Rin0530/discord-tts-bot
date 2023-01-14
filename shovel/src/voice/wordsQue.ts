@@ -50,10 +50,8 @@ function regrep(message:string){
 
 async function replace(message:string, guildId:string):Promise<string>{
     const result = await getWords(guildId);
-    return new Promise(resolve => {
-        let text = message;
-        for(let before in result) 
-            text = text.split(before).join(result[before])
-        resolve(text);
-    })
+    let text = message;
+    for(let before in result) 
+        text = text.split(before).join(result[before])
+    return text
 }

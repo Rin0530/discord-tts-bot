@@ -7,7 +7,6 @@ import {
     ApplicationCommandData
 } from "discord.js"
 import * as voice from "@discordjs/voice"
-import { initialize} from '../db/database'
 import { guildArray, playerArray } from "../util/arrays"
 import { PLayerOptions } from "../voice/wordsQue"
 
@@ -30,9 +29,8 @@ export async function join(interaction:CommandInteraction) {
     const VC = member.voice.channel
     
     if(!VC?.joinable) return interaction.reply("You have to connect any VC!!")
-    
     await interaction.reply("接続中")
-
+    
     const conn = voice.joinVoiceChannel({
         channelId: VC.id,
         guildId: VC.guildId,
@@ -64,8 +62,6 @@ export async function join(interaction:CommandInteraction) {
 
     guildArray[guild.id] = [];
     playerArray[guild.id] = new PLayerOptions(interaction.channel, voice.createAudioPlayer()); 
-
-    initialize(guild);
 
     if(conn)
         interaction.editReply({embeds: [reply]})
