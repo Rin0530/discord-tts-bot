@@ -1,7 +1,8 @@
-import { ActivityOptions, ActivityType, Client } from "discord.js";
+import { ActivityType, Client } from "discord.js";
 import { register } from "../commands/mod";
 import { loadDeleteCommand } from "../util/loadDeleteCommand";
-import { tts } from "../voice/tts";
+import { pitchArray, wordsArray } from "../util/arrays";
+import { getPitch, getWords } from "../db/database";
 
 export async function ready(client:Client){
     const applicationManager = client.application;
@@ -16,5 +17,24 @@ export async function ready(client:Client){
       )
     console.log("login succeed!")
 
-    setInterval(async () => await tts(), 1000)
+    loadWordsDict(client)
+
+    loadPitchs(client)
+}
+
+function loadWordsDict(client:Client){
+  const guilds = client.guilds.cache
+  guilds.forEach(async (guild) => {
+    const words = await getWords(guild.id)
+    wordsArray[guild.id] = []
+    wordsArray[guild.id].push(words)
+  })
+}
+
+function loadPitchs(client:Client){
+  const users = client.users.cache
+  users.forEach(async (user) => {
+    const pitch = await getPitch(user.id)
+    pitchArray[user.id] = pitch
+  })
 }

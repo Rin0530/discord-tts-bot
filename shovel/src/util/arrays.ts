@@ -11,3 +11,9 @@ export const playerArray:{
 export const pitchArray:{
     [userId:string]: number
 } = {}
+
+export const wordsArray:{
+    [guildId:string]: {
+        [key: string]: string;
+    }[]
+} = {}

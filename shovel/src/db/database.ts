@@ -2,7 +2,7 @@ import { createClient } from '@supabase/supabase-js'
 import { Database } from './models'
 import { Guild } from 'discord.js'
 import { configs } from '../configs'
-import { pitchArray } from '../util/arrays'
+import { pitchArray, wordsArray } from '../util/arrays'
 
 // Create a single supabase client for interacting with your database
 const client = createClient<Database>(configs.db_env.url, configs.db_env.api_key)
@@ -20,6 +20,12 @@ export async function registerWord(guild:Guild, before:string, after:string):Pro
         }
     ).select()
     
+    if(data)
+        wordsArray[guild.id].push({
+            before: data[0].before,
+            after: data[0].after
+        })
+
     return !!data
 }
 
@@ -71,7 +77,7 @@ export async function getPitch(userId:string): Promise<number> {
     const { data, error } = await table.select()
         //.eq('id',userId)
         
-    if(data){
+    if(data){        
         const res = data.find(row => row.id == userId)
         return res?.pitch || -100
     }
