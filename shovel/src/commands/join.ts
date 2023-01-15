@@ -9,6 +9,7 @@ import {
 import * as voice from "@discordjs/voice"
 import { guildArray, playerArray } from "../util/arrays"
 import { PLayerOptions } from "../voice/wordsQue"
+import { tts } from "../voice/tts"
 
 export const registerJoin:ApplicationCommandData = {
     name: "join",
@@ -61,8 +62,15 @@ export async function join(interaction:CommandInteraction) {
     })
 
     guildArray[guild.id] = [];
-    playerArray[guild.id] = new PLayerOptions(interaction.channel, voice.createAudioPlayer()); 
-
+    playerArray[guild.id] = new PLayerOptions(
+        interaction.channel,
+        voice.createAudioPlayer()
+            .on("stateChange", (_oldState, newState) =>{                
+                if(newState.status == voice.AudioPlayerStatus.Idle)
+                    tts(guild.id)
+            })
+    ); 
+    
     if(conn)
         interaction.editReply({
                 embeds: [reply],

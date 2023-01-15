@@ -1,7 +1,8 @@
 import { AudioPlayer } from "@discordjs/voice";
 import { Channel, Message } from "discord.js";
-import { getPitch, getWords, registerPitch } from "../db/database";
-import { guildArray, pitchArray, playerArray } from "../util/arrays";
+import { getPitch, registerPitch } from "../db/database";
+import { guildArray, pitchArray, playerArray, wordsArray } from "../util/arrays";
+import { play } from "./tts";
 
 export class TextQue{
     public text:string;
@@ -37,6 +38,8 @@ export async function addQue(message: Message){
     text = regrep(text);
     
     guildArray[guildId].push(new TextQue(text,pitchArray[message.author.id]));
+    
+    play(guildId)
 }
 
 function regrep(message:string){
@@ -49,9 +52,13 @@ function regrep(message:string){
 }
 
 async function replace(message:string, guildId:string):Promise<string>{
-    const result = await getWords(guildId);
+    const result = wordsArray[guildId]
     let text = message;
-    for(let before in result) 
-        text = text.split(before).join(result[before])
+
+    result.forEach(value => {
+        for(let before in value) 
+            text = text.split(before).join(value[before])
+    })
+    
     return text
 }
