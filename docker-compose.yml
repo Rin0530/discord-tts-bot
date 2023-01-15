@@ -1,38 +1,16 @@
 version: '3'
 services:
   app:
-    image: node:17-bullseye
+    image: node:lts-bullseye
     tty: true
     container_name: tts
     working_dir: /app
     entrypoint: ["bash","./docker-entrypoint.sh"]
     volumes:
       - ./shovel:/app
-    #mysqlに依存しているので、mysqlコンテナ作成後、appコンテナが作られる。
-    depends_on:
-      - mariadb
-    links: 
-      - "mariadb:db"
     env_file:
      - ./.env
     environment:
-      - MARIADB_DATABASE=tts
       - GOOGLE_APPLICATION_CREDENTIALS=./client_secret.json
-    restart: on-failure
-
-  mariadb:
-    image: mariadb:focal
-    container_name: tts_db
-    env_file: 
-      - ./.env
-    #環境変数設定。タイムゾーンを日本時間に設定。
-    environment:
-      - TZ=Asia/Tokyo
-    volumes:
-      #mysqlのデフォルト設定ファイルを上書き。:roでコンテナ側からは読み取り専用設定。
-      - ./mysql/conf:/etc/mysql/conf.d/:ro
-      #mysqldataにマウントすることで、コンテナを削除してもデーターは残るように設定。
-      - ./mysqldata:/var/lib/mysql
-      #必要なテーブルを作成するスクリプトを配置
-      - ./mysql/init.d:/docker-entrypoint-initdb.d
+    restart: always
     
