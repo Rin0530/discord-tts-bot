@@ -1,4 +1,4 @@
-import { ApplicationCommandData, Colors, CommandInteraction } from "discord.js"
+import { ApplicationCommandData, CommandInteraction } from "discord.js"
 import { ApplicationCommandOptionType } from "discord-api-types/v10";
 import { createWriteStream } from "fs"
 import { getWords } from "../db/database";
@@ -57,7 +57,10 @@ export async function list(interaction:CommandInteraction) {
             for(let before in result)
                 stream.write(`${before}, ${result[before]}\n`)
             stream.end("\n")
-            interaction.editReply({files: ["./list.txt"]})
+            interaction.editReply({
+                files: ["./list.txt"],
+                content: ""
+            })
             break;
     }    
 }

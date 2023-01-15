@@ -64,7 +64,10 @@ export async function join(interaction:CommandInteraction) {
     playerArray[guild.id] = new PLayerOptions(interaction.channel, voice.createAudioPlayer()); 
 
     if(conn)
-        interaction.editReply({embeds: [reply]})
+        interaction.editReply({
+                embeds: [reply],
+                content: ""
+            });
     else 
         interaction.editReply("エラー")
 }

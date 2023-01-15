@@ -30,6 +30,11 @@ export async function setpitch(interaction:CommandInteraction){
     if(!pitch) return
     if(pitch < -20 || pitch > 20)
         return interaction.reply("The pitch must range between -20.0 and 20.0.");
+
+    await interaction.reply({
+        content: "処理中",
+        ephemeral: true
+    })
     
     const result = await registerPitch(userId, parseFloat(pitch.toString()));
     const success = new EmbedBuilder({
@@ -60,5 +65,8 @@ export async function setpitch(interaction:CommandInteraction){
     });
 
     const replyOption:InteractionReplyOptions = {embeds:[result ? success : failed], ephemeral:true}
-    return interaction.reply(replyOption);
+    return interaction.editReply({
+        embeds: [result ? success : failed],
+        content: ""
+    });
 }

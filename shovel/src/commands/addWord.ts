@@ -58,7 +58,10 @@ export async function addword(interaction:CommandInteraction) {
             }
         ]
     })
-    interaction.editReply(result ? {embeds: [embed]} : "エラー");
+    interaction.editReply(result ? {
+        embeds: [embed],
+        content: ""
+    } : "エラー");
     
     loadDeleteCommand(interaction.client)
 }

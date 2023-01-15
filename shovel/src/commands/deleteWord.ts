@@ -60,6 +60,9 @@ export async function deleteword(interaction:CommandInteraction){
         );
     }
 
-    interaction.editReply({embeds: [embed]});
+    interaction.editReply({
+            embeds: [embed],
+            content: ""
+        });
     loadDeleteCommand(interaction.client)
 }

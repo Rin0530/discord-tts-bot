@@ -1,4 +1,4 @@
-import { ApplicationCommandData, Colors, CommandInteraction, InteractionReplyOptions, EmbedBuilder } from "discord.js"
+import { ApplicationCommandData, Colors, CommandInteraction, EmbedBuilder } from "discord.js"
 import * as db from "../db/database"
 import { pitchArray } from "../util/arrays";
 
@@ -8,6 +8,11 @@ export const registerGetPitch:ApplicationCommandData = {
 }
 
 export async function getpitch(interaction:CommandInteraction) {
+    await interaction.reply({
+        content: "処理中",
+        ephemeral: true
+    })
+
     const sender = interaction.user;
     const result = await db.getPitch(sender.id);
     const pitch = result == -100 ? sender.createdTimestamp %400 /10 -20 : result;
@@ -29,7 +34,9 @@ export async function getpitch(interaction:CommandInteraction) {
     interaction.client.users.cache.each( async value => {
         pitchArray[value.id] = pitch        
     })
-    const replyOption:InteractionReplyOptions = {embeds:[message], ephemeral:true}
     
-    return interaction.reply(replyOption)
+    return interaction.editReply({
+        embeds: [message],
+        content: "true"
+        })
 }
