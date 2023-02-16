@@ -7,10 +7,9 @@ services:
     working_dir: /app
     entrypoint: ["bash","./docker-entrypoint.sh"]
     volumes:
-      - ./shovel:/app
+      - ./:/app
     env_file:
      - ./.env
     environment:
       - GOOGLE_APPLICATION_CREDENTIALS=./client_secret.json
     restart: always
-    

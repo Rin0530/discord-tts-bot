@@ -4,9 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "ts-node-dev --respawn ./src/client.ts",
+    "start": "ts-node ./src/client.ts",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "tsc": "tsc"
+    "dev": "ts-node-dev --respawn ./src/client.ts"
   },
   "author": "",
   "license": "ISC",

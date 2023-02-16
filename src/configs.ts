@@ -2,6 +2,13 @@ export const configs = {
   token: getToken(),
   credential: getCredential(),
   db_env: getDBENV()
+} as const satisfies {
+  token: string,
+  credential:string,
+  db_env:{
+    url:string,
+    api_key:string
+  }
 }
 
 function getToken():string{
