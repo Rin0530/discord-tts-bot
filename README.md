@@ -2,17 +2,40 @@
 
 このbotを自前のサーバで動かすためにはこの階層に
 - TOKEN // discordBotのトークン
-- MARIADB_USER　// データベースに接続するユーザ
-- MARIADB_PASSWORD // データベースに接続するためのパスワード
-- MARIADB_ROOT_PASSWORD // rootでデータベースに接続するためのパスワード
+- PROJECT_URL // supabaseのプロジェクトURL
+- API_KEY // supabaseのプロジェクトのAPIキー
 
 を記述した.envファイルが必要です。  
-TOKEN以外の環境変数は任意のもので良いです。  
 
-また、[Google CloudのText-to-Speech](https://cloud.google.com/text-to-speech)を使用しているので、サービスアカウントのjsonファイルをclient_secret.jsonという名前でshovel以下に配置してください
+また、[Google CloudのText-to-Speech](https://cloud.google.com/text-to-speech)を使用しているので、サービスアカウントのjsonファイルをclient_secret.jsonという名前でshovel以下に配置してください.
+
+さらに[supabase](https://app.supabase.com)のプロジェクトからSQL Editorで
+```sql
+set time zone "Asia/Tokyo";
+
+create table wordsDict (
+  before text not null,
+  after text not null,
+  guild_id text not null,
+  primary key (before, guild_id)
+);
+
+
+alter table wordsDict
+  enable row level security;
+
+create table pitch (
+  id text,
+  pitch float not null,
+  primary key (id)
+);
+
+alter table pitch
+  enable row level security;
+```
+を実行し、テーブルを作成してください。
 
 2つのファイルが用意できれば、
-mysql/init.d以下のファイルに実行権限を付与した上で
 ```bash
 docker-compose up
 ```
