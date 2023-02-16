@@ -3,7 +3,13 @@ import { configs } from './configs'
 import { ready, onMessageCreate, onInteraction,  onVoiceStateUpdate} from './listener/mod'
 
 const client = new Client({
-  intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildVoiceStates, GatewayIntentBits.GuildIntegrations, GatewayIntentBits.GuildMessages,GatewayIntentBits.MessageContent]
+  intents: [
+    GatewayIntentBits.Guilds,
+    GatewayIntentBits.GuildVoiceStates,
+    GatewayIntentBits.GuildIntegrations, 
+    GatewayIntentBits.GuildMessages,
+    GatewayIntentBits.MessageContent
+  ]
 })
 
 client.on('messageCreate', (message) => onMessageCreate(message));

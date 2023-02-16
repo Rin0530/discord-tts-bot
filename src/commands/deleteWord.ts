@@ -1,5 +1,11 @@
+import { 
+    ApplicationCommandData, 
+    ApplicationCommandOptionChoiceData,
+    CommandInteraction,
+    Colors, 
+    EmbedBuilder
+} from "discord.js"
 import { ApplicationCommandOptionType } from "discord-api-types/v10"
-import { CommandInteraction, ApplicationCommandData, Colors, EmbedBuilder,ApplicationCommandOptionChoiceData } from "discord.js"
 import { deleteWord, getWords } from "../db/database";
 import { loadDeleteCommand } from "../util/loadDeleteCommand";
 

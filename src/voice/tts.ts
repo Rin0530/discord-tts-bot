@@ -3,7 +3,7 @@ import { Readable } from "stream";
 import * as textToSpeech from '@google-cloud/text-to-speech'
 import { configs } from '../configs'
 import { TextQue } from "./wordsQue";
-import { guildArray, playerArray, pitchArray } from "../util/arrays";
+import { guildArray, playerArray } from "../util/arrays";
 
 const ttsClient = new textToSpeech.TextToSpeechClient({
     keyFilename: configs.credential

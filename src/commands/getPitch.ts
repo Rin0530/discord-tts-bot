@@ -1,4 +1,8 @@
-import { ApplicationCommandData, Colors, CommandInteraction, EmbedBuilder } from "discord.js"
+import { 
+    ApplicationCommandData,
+    Colors,
+    CommandInteraction,
+    EmbedBuilder } from "discord.js"
 import * as db from "../db/database"
 import { pitchArray } from "../util/arrays";
 

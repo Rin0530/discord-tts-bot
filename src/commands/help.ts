@@ -1,4 +1,8 @@
-import { ApplicationCommandData, Colors, CommandInteraction, EmbedBuilder } from "discord.js"
+import { 
+    ApplicationCommandData,
+    Colors, 
+    CommandInteraction,
+    EmbedBuilder } from "discord.js"
 
 export const registerHelp:ApplicationCommandData = {
     name: "help",
