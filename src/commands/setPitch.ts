@@ -26,7 +26,7 @@ export async function setpitch(interaction:CommandInteraction){
     if(!member) return interaction.reply("API guild user can not use this command!");
 
     const userId = member.user.id;
-    const pitch = interaction.options.get("pitch",true).value;
+    const pitch = interaction.options.get("pitch",true).value as number ;
     if(!pitch) return
     if(pitch < -20 || pitch > 20)
         return interaction.reply("The pitch must range between -20.0 and 20.0.");
