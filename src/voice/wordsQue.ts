@@ -47,7 +47,12 @@ function regrep(message:string){
     text = text.replace(/<a?:.*?:\d+>/,"");     //カスタム絵文字を読み飛ばす
     text = text.replace(/(\d{4})\/(\d{1,2})\/(\d{1,2})/g,"$1年$2月$3日")    //年月日に置換
     text = text.replace(/(\d{1,2})\/(\d{1,2})/g,"$1月$2日")    //月日に置換
-    text = text.replace(/[^\w０-９あ-んア-ンぁ-ょｱ-ﾝｦ-ﾟ\-ー\u4E00-\u9FFF]/g,"");      //数字、半角英字、ひらがな、カタカナ、半角カタカナ、漢字以外を読み飛ばす
+    text = text.replace(/[Ａ-Ｚａ-ｚ０-９]/g, (s) => {
+        return String.fromCharCode(
+          s.charCodeAt(0) - 65248
+        );
+      })    // 全角英数文字を半角に変換
+    text = text.replace(/[^\wあ-んア-ンぁ-ょｱ-ﾝｦ-ﾟ\-ー\u4E00-\u9FFF]/g,"");      //数字、半角英字、ひらがな、カタカナ、半角カタカナ、漢字以外を読み飛ばす
     return text;
 }
 
