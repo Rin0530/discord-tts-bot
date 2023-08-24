@@ -52,7 +52,7 @@ function regrep(message: string) {
             s.charCodeAt(0) - 65248
         );
     })    // 全角英数文字を半角に変換
-    text = text.replace(/[^\wあ-んア-ンぁ-ょｱ-ﾝｦ-ﾟ\-ー\u4E00-\u9FFF]/g, "");      //数字、半角英字、ひらがな、カタカナ、半角カタカナ、漢字以外を読み飛ばす
+    text = text.replace(/[^\wぁ-ゖァ-ヶㇰ-ㇿｦ-ﾝ\-ー\u4E00-\u9FFF]/g, "");      //数字、半角英字、ひらがな、カタカナ、半角カタカナ、漢字以外を読み飛ばす
     return text;
 }
 
