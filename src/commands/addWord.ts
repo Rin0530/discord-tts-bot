@@ -1,4 +1,4 @@
-import { 
+import {
     CommandInteraction,
     Colors,
     ApplicationCommandData,
@@ -8,7 +8,7 @@ import {
 import { registerWord } from "../db/database";
 import { loadDeleteCommand } from "../util/loadDeleteCommand";
 
-export const registerAddWord:ApplicationCommandData = {
+export const registerAddWord: ApplicationCommandData = {
     name: "addword",
     description: "replace words when this bot speak",
     options: [
@@ -27,18 +27,18 @@ export const registerAddWord:ApplicationCommandData = {
     ]
 }
 
-export async function addword(interaction:CommandInteraction) {
+export async function addword(interaction: CommandInteraction) {
     const clientUser = interaction.client.user
-    const {guild, options} = interaction;
+    const { guild, options } = interaction;
     const before = options.get("before", true).value;
-    const after = options.get("after",true).value;
-    if(!guild) return interaction.reply("this command is unable exclude textChannel!")
+    const after = options.get("after", true).value;
+    if (!guild) return interaction.reply("this command is unable exclude textChannel!")
 
     await interaction.reply("処理中")
 
-    if(!before || !after) return
+    if (!before || !after) return
 
-    const result:boolean = await registerWord(guild, before.toString(), after.toString());
+    const result: boolean = await registerWord(guild, before.toString(), after.toString());
     const embed = new EmbedBuilder({
         author: {
             name: clientUser?.username
@@ -47,7 +47,7 @@ export async function addword(interaction:CommandInteraction) {
         color: Colors.Blue,
         fields: [
             {
-                name:before.toString(),
+                name: before.toString(),
                 value: "を",
                 inline: true
             },
@@ -62,6 +62,6 @@ export async function addword(interaction:CommandInteraction) {
         embeds: [embed],
         content: ""
     } : "エラー");
-    
+
     loadDeleteCommand(interaction.client)
 }

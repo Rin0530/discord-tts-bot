@@ -1,17 +1,18 @@
-import { 
+import {
     ApplicationCommandData,
     Colors,
     CommandInteraction,
-    EmbedBuilder } from "discord.js"
+    EmbedBuilder
+} from "discord.js"
 import * as db from "../db/database"
 import { pitchArray } from "../util/arrays";
 
-export const registerGetPitch:ApplicationCommandData = {
+export const registerGetPitch: ApplicationCommandData = {
     name: "getpitch",
     description: "send Your Pitch"
 }
 
-export async function getpitch(interaction:CommandInteraction) {
+export async function getpitch(interaction: CommandInteraction) {
     await interaction.reply({
         content: "処理中",
         ephemeral: true
@@ -19,8 +20,8 @@ export async function getpitch(interaction:CommandInteraction) {
 
     const sender = interaction.user;
     const result = await db.getPitch(sender.id);
-    const pitch = result == -100 ? sender.createdTimestamp %400 /10 -20 : result;
-    
+    const pitch = result == -100 ? sender.createdTimestamp % 400 / 10 - 20 : result;
+
     const message = new EmbedBuilder({
         author: {
             name: interaction.client.user?.username
@@ -35,12 +36,12 @@ export async function getpitch(interaction:CommandInteraction) {
         ]
     });
 
-    interaction.client.users.cache.each( async value => {
-        pitchArray[value.id] = pitch        
+    interaction.client.users.cache.each(async value => {
+        pitchArray[value.id] = pitch
     })
-    
+
     return interaction.editReply({
         embeds: [message],
         content: "true"
-        })
+    })
 }
