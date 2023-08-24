@@ -5,11 +5,11 @@ services:
     tty: true
     container_name: tts
     working_dir: /app
-    entrypoint: ["npm","start"]
+    entrypoint: [ "npm", "start" ]
     volumes:
       - ./:/app
     env_file:
-     - ./.env
+      - ./.env
     environment:
       - GOOGLE_APPLICATION_CREDENTIALS=./client_secret.json
     restart: always

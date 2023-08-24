@@ -1,20 +1,21 @@
-import { 
+import {
     ApplicationCommandData,
-    Colors, 
+    Colors,
     CommandInteraction,
-    EmbedBuilder } from "discord.js"
+    EmbedBuilder
+} from "discord.js"
 
-export const registerHelp:ApplicationCommandData = {
+export const registerHelp: ApplicationCommandData = {
     name: "help",
     description: "help Command",
-    
+
 }
 
-export async function help(interaction:CommandInteraction){
+export async function help(interaction: CommandInteraction) {
     const client = interaction.client
     const commands = client.application?.commands.cache
     const guildCommands = interaction.guild?.commands.cache.first()
-    if(!commands) return interaction.reply("コマンドは存在しません")
+    if (!commands) return interaction.reply("コマンドは存在しません")
 
     const embeds = new EmbedBuilder({
         author: {
@@ -23,8 +24,8 @@ export async function help(interaction:CommandInteraction){
         description: "コマンド一覧",
         color: Colors.Yellow,
     })
-    
-    for(let command of commands){
+
+    for (let command of commands) {
         embeds.addFields(
             {
                 name: command[1].name,
@@ -34,14 +35,14 @@ export async function help(interaction:CommandInteraction){
         )
     }
 
-    if(guildCommands != undefined)
+    if (guildCommands != undefined)
         embeds.addFields(
             {
-                name:guildCommands.name,
+                name: guildCommands.name,
                 value: `\`${guildCommands.description}\``,
                 inline: false
             }
         )
 
-    interaction.reply({embeds:[embeds], ephemeral: true})
+    interaction.reply({ embeds: [embeds], ephemeral: true })
 }

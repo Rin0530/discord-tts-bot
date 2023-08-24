@@ -1,4 +1,4 @@
-import { 
+import {
     CommandInteraction,
     Colors,
     ChannelType,
@@ -11,27 +11,27 @@ import { guildArray, playerArray } from "../util/arrays"
 import { PLayerOptions } from "../voice/wordsQue"
 import { tts } from "../voice/tts"
 
-export const registerJoin:ApplicationCommandData = {
+export const registerJoin: ApplicationCommandData = {
     name: "join",
     description: "join your VC",
     options: []
 }
 
-export async function join(interaction:CommandInteraction) {
+export async function join(interaction: CommandInteraction) {
     const clientUser = interaction.client.user
-    const member = interaction.member; 
+    const member = interaction.member;
     const guild = interaction.guild
-    
-    if(!(member instanceof GuildMember)) return interaction.reply("API guild user can not use this command!")
 
-    if(interaction.channel?.type != ChannelType.GuildText || !guild) return interaction.reply("this command is unable exclude textChannel!")
+    if (!(member instanceof GuildMember)) return interaction.reply("API guild user can not use this command!")
+
+    if (interaction.channel?.type != ChannelType.GuildText || !guild) return interaction.reply("this command is unable exclude textChannel!")
 
     const textChannelName = interaction.channel.name;
     const VC = member.voice.channel
-    
-    if(!VC?.joinable) return interaction.reply("You have to connect any VC!!")
+
+    if (!VC?.joinable) return interaction.reply("You have to connect any VC!!")
     await interaction.reply("接続中")
-    
+
     const conn = voice.joinVoiceChannel({
         channelId: VC.id,
         guildId: VC.guildId,
@@ -43,7 +43,7 @@ export async function join(interaction:CommandInteraction) {
             name: clientUser?.username
         },
         description: "`接続を完了しました。読み上げを開始します`",
-        color: Colors.Green, 
+        color: Colors.Green,
         fields: [
             {
                 name: `${textChannelName}チャンネル`,
@@ -54,7 +54,7 @@ export async function join(interaction:CommandInteraction) {
                 name: `\`${VC.name}\``,
                 value: "で読み上げます",
                 inline: true
-            } 
+            }
         ],
         footer: {
             text: "/helpでコマンド一覧を表示できます"
@@ -65,17 +65,17 @@ export async function join(interaction:CommandInteraction) {
     playerArray[guild.id] = new PLayerOptions(
         interaction.channel,
         voice.createAudioPlayer()
-            .on("stateChange", (_oldState, newState) =>{                
-                if(newState.status == voice.AudioPlayerStatus.Idle)
+            .on("stateChange", (_oldState, newState) => {
+                if (newState.status == voice.AudioPlayerStatus.Idle)
                     tts(guild.id)
             })
-    ); 
-    
-    if(conn)
+    );
+
+    if (conn)
         interaction.editReply({
-                embeds: [reply],
-                content: ""
-            });
-    else 
+            embeds: [reply],
+            content: ""
+        });
+    else
         interaction.editReply("エラー")
 }

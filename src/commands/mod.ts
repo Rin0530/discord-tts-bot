@@ -1,4 +1,4 @@
-import { CommandInteraction,ApplicationCommandData } from "discord.js"
+import { CommandInteraction, ApplicationCommandData } from "discord.js"
 import * as join from "./join"
 import * as disconnect from "./disconnect"
 import * as addWord from "./addWord"
@@ -19,7 +19,7 @@ const commands = [
     help.help
 ];
 
-export const register:Array<ApplicationCommandData> = [
+export const register: Array<ApplicationCommandData> = [
     join.registerJoin,
     disconnect.registerDc,
     addWord.registerAddWord,
@@ -29,10 +29,10 @@ export const register:Array<ApplicationCommandData> = [
     help.registerHelp
 ]
 
-export function commandProcess(interaction:CommandInteraction) {
+export function commandProcess(interaction: CommandInteraction) {
     const process = commands.find(value => value.name === interaction.commandName);
-    if(!process) 
+    if (!process)
         return interaction.reply(`${interaction.commandName} was not found`);
-    else 
+    else
         return process(interaction);
 }
