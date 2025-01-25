@@ -2,7 +2,8 @@ import {
     ApplicationCommandData,
     Colors,
     CommandInteraction,
-    EmbedBuilder
+    EmbedBuilder,
+    MessageFlags
 } from "discord.js"
 
 export const registerHelp: ApplicationCommandData = {
@@ -44,5 +45,5 @@ export async function help(interaction: CommandInteraction) {
             }
         )
 
-    interaction.reply({ embeds: [embeds], ephemeral: true })
+    interaction.reply({ embeds: [embeds] , flags: MessageFlags.Ephemeral})
 }

@@ -2,7 +2,8 @@ import {
     ApplicationCommandData,
     Colors,
     CommandInteraction,
-    EmbedBuilder
+    EmbedBuilder,
+    MessageFlags
 } from "discord.js"
 import * as db from "../db/database"
 import { pitchArray } from "../util/arrays";
@@ -15,7 +16,7 @@ export const registerGetPitch: ApplicationCommandData = {
 export async function getpitch(interaction: CommandInteraction) {
     await interaction.reply({
         content: "処理中",
-        ephemeral: true
+        flags: MessageFlags.Ephemeral,
     })
 
     const sender = interaction.user;
@@ -42,6 +43,6 @@ export async function getpitch(interaction: CommandInteraction) {
 
     return interaction.editReply({
         embeds: [message],
-        content: "true"
+        content: "true",
     })
 }

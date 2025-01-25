@@ -5,7 +5,7 @@ import {
     EmbedBuilder,
     InteractionReplyOptions
 } from "discord.js";
-import { ApplicationCommandOptionType } from "discord-api-types/v10"
+import { ApplicationCommandOptionType, MessageFlags } from "discord-api-types/v10"
 import { registerPitch } from "../db/database";
 
 export const registerSetPitch: ApplicationCommandData = {
@@ -33,7 +33,7 @@ export async function setpitch(interaction: CommandInteraction) {
 
     await interaction.reply({
         content: "処理中",
-        ephemeral: true
+        flags: MessageFlags.Ephemeral
     })
 
     const result = await registerPitch(userId, parseFloat(pitch.toString()));
@@ -64,6 +64,6 @@ export async function setpitch(interaction: CommandInteraction) {
         ]
     });
 
-    const replyOption: InteractionReplyOptions = { embeds: [result ? success : failed], ephemeral: true }
+    const replyOption: InteractionReplyOptions = { embeds: [result ? success : failed], flags: MessageFlags.Ephemeral}
     return interaction.editReply(replyOption);
 }
