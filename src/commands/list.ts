@@ -32,9 +32,9 @@ export const registerList: ApplicationCommandData = {
 }
 
 export async function list(interaction: CommandInteraction) {
+    if (!interaction.isChatInputCommand()) return;
     const guildId = interaction.guildId;
-    const option = interaction.options.get("method", false)
-    const method = option?.value ? option.value : METHOD.codeBlock
+    const method = interaction.options.getString("method", false) ?? METHOD.codeBlock
     if (!guildId)
         return interaction.reply("this command is unable exclude textChannel!");
 

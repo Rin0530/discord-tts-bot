@@ -17,6 +17,7 @@ const client = createClient<Database>(
 
 export async function registerWord(guild: Guild, before: string, after: string): Promise<boolean> {
     const table = client.from('wordsdict');
+    // @ts-ignore
     const { data, error } = await table.upsert(
         {
             before: before,
@@ -26,13 +27,7 @@ export async function registerWord(guild: Guild, before: string, after: string):
         {
             onConflict: "before,guild_id"
         }
-    ).select()
-
-    if (data)
-        wordsArray[guild.id].push({
-            before: data[0].before,
-            after: data[0].after
-        })
+    )
 
     return !!data
 }
@@ -44,7 +39,7 @@ export async function getWords(guildId: string): Promise<{ [key: string]: string
 
     if (data) {
         const result: { [key: string]: string; } = {};
-        for (const v of data) {
+        for (const v of (data as Database['public']['Tables']['wordsdict']['Row'][])) {
             if (v.guild_id == guildId)
                 result[v.before] = v.after;
         }
@@ -58,12 +53,12 @@ export async function deleteWord(guildId: string, word: string): Promise<boolean
     const { data, error } = await table.delete()
         .eq("guild_id", guildId)
         .eq('before', word)
-        .select()
     return !!data
 }
 
 export async function registerPitch(userId: string, pitch: number): Promise<boolean> {
     const table = client.from('pitch');
+    // @ts-ignore
     const { data, error } = await table.upsert(
         {
             id: userId,
@@ -72,7 +67,7 @@ export async function registerPitch(userId: string, pitch: number): Promise<bool
         {
             onConflict: "id"
         }
-    ).select()
+    )
 
     if (!error)
         pitchArray[userId] = pitch
@@ -86,7 +81,7 @@ export async function getPitch(userId: string): Promise<number> {
     //.eq('id',userId)
 
     if (data) {
-        const res = data.find(row => row.id == userId)
+        const res = (data as Database['public']['Tables']['pitch']['Row'][]).find(row => row.id == userId)
         return res?.pitch || -100
     }
     else
