@@ -33,7 +33,7 @@ export async function setpitch(interaction: CommandInteraction) {
 
     await interaction.reply({
         content: "処理中",
-        flags: MessageFlags.Ephemeral
+        flags: 'Ephemeral'
     })
 
     const result = await registerPitch(userId, parseFloat(pitch.toString()));
@@ -64,6 +64,6 @@ export async function setpitch(interaction: CommandInteraction) {
         ]
     });
 
-    const replyOption: InteractionReplyOptions = { embeds: [result ? success : failed], flags: MessageFlags.Ephemeral}
+    const replyOption: InteractionReplyOptions = { embeds: [result ? success : failed], flags: 'Ephemeral' };
     return interaction.editReply(replyOption);
 }
