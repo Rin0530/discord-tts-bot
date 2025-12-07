@@ -3,7 +3,8 @@ import {
     ApplicationCommandOptionChoiceData,
     CommandInteraction,
     Colors,
-    EmbedBuilder
+    EmbedBuilder,
+    ChatInputCommandInteraction
 } from "discord.js"
 import { ApplicationCommandOptionType } from "discord-api-types/v10"
 import { deleteWord, getWords } from "../db/database";
@@ -35,8 +36,7 @@ export async function registerDeleteWordForGuild(guildId: string): Promise<Appli
     }
 }
 
-export async function deleteword(interaction: CommandInteraction) {
-    if (!interaction.isChatInputCommand()) return;
+export async function deleteword(interaction: ChatInputCommandInteraction) {
     const clientUser = interaction.client.user;
     if (!clientUser) return;
     const { guildId, options } = interaction;

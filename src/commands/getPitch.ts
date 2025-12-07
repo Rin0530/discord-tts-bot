@@ -1,5 +1,6 @@
 import {
     ApplicationCommandData,
+    ChatInputCommandInteraction,
     Colors,
     CommandInteraction,
     EmbedBuilder,
@@ -13,7 +14,7 @@ export const registerGetPitch: ApplicationCommandData = {
     description: "send Your Pitch"
 }
 
-export async function getpitch(interaction: CommandInteraction) {
+export async function getpitch(interaction: ChatInputCommandInteraction) {
     await interaction.reply({
         content: "処理中",
         flags: MessageFlags.Ephemeral,

@@ -4,7 +4,8 @@ import {
     ChannelType,
     GuildMember,
     EmbedBuilder,
-    ApplicationCommandData
+    ApplicationCommandData,
+    ChatInputCommandInteraction
 } from "discord.js"
 import * as voice from "@discordjs/voice"
 import { guildArray, playerArray } from "../util/arrays"
@@ -17,7 +18,7 @@ export const registerJoin: ApplicationCommandData = {
     options: []
 }
 
-export async function join(interaction: CommandInteraction) {
+export async function join(interaction: ChatInputCommandInteraction) {
     const clientUser = interaction.client.user
     const member = interaction.member;
     const guild = interaction.guild

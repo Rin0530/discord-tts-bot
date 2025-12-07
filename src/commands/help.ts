@@ -1,5 +1,6 @@
 import {
     ApplicationCommandData,
+    ChatInputCommandInteraction,
     Colors,
     CommandInteraction,
     EmbedBuilder,
@@ -12,7 +13,7 @@ export const registerHelp: ApplicationCommandData = {
 
 }
 
-export async function help(interaction: CommandInteraction) {
+export async function help(interaction: ChatInputCommandInteraction) {
     const client = interaction.client
     const commands = client.application?.commands.cache
     const guildCommands = interaction.guild?.commands.cache.first()

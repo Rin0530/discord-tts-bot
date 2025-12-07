@@ -1,4 +1,4 @@
-import { ApplicationCommandData, CommandInteraction } from "discord.js"
+import { ApplicationCommandData, ChatInputCommandInteraction, CommandInteraction } from "discord.js"
 import { ApplicationCommandOptionType } from "discord-api-types/v10";
 import { createWriteStream } from "fs"
 import { getWords } from "../db/database";
@@ -31,7 +31,7 @@ export const registerList: ApplicationCommandData = {
     ]
 }
 
-export async function list(interaction: CommandInteraction) {
+export async function list(interaction: ChatInputCommandInteraction) {
     if (!interaction.isChatInputCommand()) return;
     const guildId = interaction.guildId;
     const method = interaction.options.getString("method", false) ?? METHOD.codeBlock

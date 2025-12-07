@@ -3,7 +3,8 @@ import {
     Colors,
     ApplicationCommandData,
     EmbedBuilder,
-    ApplicationCommandOptionType
+    ApplicationCommandOptionType,
+    ChatInputCommandInteraction
 } from "discord.js"
 import { registerWord } from "../db/database";
 import { loadDeleteCommand } from "../util/loadDeleteCommand";
@@ -27,8 +28,7 @@ export const registerAddWord: ApplicationCommandData = {
     ]
 }
 
-export async function addword(interaction: CommandInteraction) {
-    if (!interaction.isChatInputCommand()) return;
+export async function addword(interaction: ChatInputCommandInteraction) {
     const clientUser = interaction.client.user
     if (!clientUser) return;
     const { guild, options } = interaction;

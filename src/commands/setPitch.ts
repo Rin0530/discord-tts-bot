@@ -1,5 +1,6 @@
 import {
     ApplicationCommandData,
+    ChatInputCommandInteraction,
     Colors,
     CommandInteraction,
     EmbedBuilder,
@@ -21,7 +22,7 @@ export const registerSetPitch: ApplicationCommandData = {
     ]
 }
 
-export async function setpitch(interaction: CommandInteraction) {
+export async function setpitch(interaction: ChatInputCommandInteraction) {
     if (!interaction.isChatInputCommand()) return;
     const member = interaction.member;
     if (!member) return interaction.reply("API guild user can not use this command!");
