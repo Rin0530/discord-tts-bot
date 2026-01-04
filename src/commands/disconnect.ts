@@ -1,5 +1,5 @@
 import { getVoiceConnection } from "@discordjs/voice";
-import { ApplicationCommandData, CommandInteraction } from "discord.js"
+import { ApplicationCommandData, ChatInputCommandInteraction, CommandInteraction } from "discord.js"
 import { disconnect } from "../util/disconnection";
 
 export const registerDc: ApplicationCommandData = {
@@ -7,7 +7,7 @@ export const registerDc: ApplicationCommandData = {
     description: "diconnect from VC"
 }
 
-export async function dc(interaction: CommandInteraction) {
+export async function dc(interaction: ChatInputCommandInteraction) {
     const guildID = interaction.guildId;
     if (!guildID) return interaction.reply("this command is unable exclude textChannel!")
     const connection = getVoiceConnection(guildID);

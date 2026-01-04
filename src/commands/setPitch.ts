@@ -1,11 +1,12 @@
 import {
     ApplicationCommandData,
+    ChatInputCommandInteraction,
     Colors,
     CommandInteraction,
     EmbedBuilder,
-    InteractionReplyOptions
+    InteractionEditReplyOptions
 } from "discord.js";
-import { ApplicationCommandOptionType, MessageFlags } from "discord-api-types/v10"
+import { ApplicationCommandOptionType } from "discord-api-types/v10"
 import { registerPitch } from "../db/database";
 
 export const registerSetPitch: ApplicationCommandData = {
@@ -21,22 +22,21 @@ export const registerSetPitch: ApplicationCommandData = {
     ]
 }
 
-export async function setpitch(interaction: CommandInteraction) {
+export async function setpitch(interaction: ChatInputCommandInteraction) {
+    if (!interaction.isChatInputCommand()) return;
     const member = interaction.member;
     if (!member) return interaction.reply("API guild user can not use this command!");
 
     const userId = member.user.id;
-    const pitch = interaction.options.get("pitch", true).value as number;
-    if (!pitch) return
+    const pitch = interaction.options.getNumber("pitch", true);
     if (pitch < -20 || pitch > 20)
         return interaction.reply("The pitch must range between -20.0 and 20.0.");
 
     await interaction.reply({
         content: "処理中",
-        flags: MessageFlags.Ephemeral
     })
 
-    const result = await registerPitch(userId, parseFloat(pitch.toString()));
+    const result = await registerPitch(userId, pitch);
     const success = new EmbedBuilder({
         author: {
             name: interaction.client.user?.username
@@ -64,6 +64,6 @@ export async function setpitch(interaction: CommandInteraction) {
         ]
     });
 
-    const replyOption: InteractionReplyOptions = { embeds: [result ? success : failed], flags: MessageFlags.Ephemeral}
+    const replyOption: InteractionEditReplyOptions = { embeds: [result ? success : failed] }
     return interaction.editReply(replyOption);
 }

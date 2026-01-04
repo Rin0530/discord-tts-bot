@@ -3,7 +3,8 @@ import {
     ApplicationCommandOptionChoiceData,
     CommandInteraction,
     Colors,
-    EmbedBuilder
+    EmbedBuilder,
+    ChatInputCommandInteraction
 } from "discord.js"
 import { ApplicationCommandOptionType } from "discord-api-types/v10"
 import { deleteWord, getWords } from "../db/database";
@@ -35,24 +36,24 @@ export async function registerDeleteWordForGuild(guildId: string): Promise<Appli
     }
 }
 
-export async function deleteword(interaction: CommandInteraction) {
-    const clientUser = interaction.client.user
+export async function deleteword(interaction: ChatInputCommandInteraction) {
+    const clientUser = interaction.client.user;
+    if (!clientUser) return;
     const { guildId, options } = interaction;
-    const word = options.get("word", true).value;
+    const word = options.getString("word", true);
     if (!guildId) return interaction.reply("this command is unable exclude textChannel!");
     await interaction.reply("処理中");
-    if (!word) return
-    const result = await deleteWord(guildId, word.toString());
+    const result = await deleteWord(guildId, word);
     const embed = new EmbedBuilder({
         author: {
-            name: clientUser?.username
+            name: clientUser.username
         }
     });
     if (result) {
         embed.setDescription("削除成功");
         embed.setColor(Colors.Blue);
         embed.addFields({
-            name: word.toString(),
+            name: word,
             value: "を単語辞書から削除しました"
         });
     } else {
@@ -60,7 +61,7 @@ export async function deleteword(interaction: CommandInteraction) {
         embed.setColor("#ff0000");
         embed.addFields(
             {
-                name: word.toString(),
+                name: word,
                 value: "は単語辞書に存在しません"
             }
         );

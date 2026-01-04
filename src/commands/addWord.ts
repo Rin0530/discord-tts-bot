@@ -3,7 +3,8 @@ import {
     Colors,
     ApplicationCommandData,
     EmbedBuilder,
-    ApplicationCommandOptionType
+    ApplicationCommandOptionType,
+    ChatInputCommandInteraction
 } from "discord.js"
 import { registerWord } from "../db/database";
 import { loadDeleteCommand } from "../util/loadDeleteCommand";
@@ -27,32 +28,31 @@ export const registerAddWord: ApplicationCommandData = {
     ]
 }
 
-export async function addword(interaction: CommandInteraction) {
+export async function addword(interaction: ChatInputCommandInteraction) {
     const clientUser = interaction.client.user
+    if (!clientUser) return;
     const { guild, options } = interaction;
-    const before = options.get("before", true).value;
-    const after = options.get("after", true).value;
+    const before = options.getString("before", true)
+    const after = options.getString("after", true)
     if (!guild) return interaction.reply("this command is unable exclude textChannel!")
 
     await interaction.reply("処理中")
 
-    if (!before || !after) return
-
-    const result: boolean = await registerWord(guild, before.toString(), after.toString());
+    const result: boolean = await registerWord(guild, before, after);
     const embed = new EmbedBuilder({
         author: {
-            name: clientUser?.username
+            name: clientUser.username
         },
         description: "登録成功。今後は",
         color: Colors.Blue,
         fields: [
             {
-                name: before.toString(),
+                name: before,
                 value: "を",
                 inline: true
             },
             {
-                name: after.toString(),
+                name: after,
                 value: "として読み上げます",
                 inline: true
             }
