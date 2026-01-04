@@ -23,6 +23,7 @@ export interface Database {
           id?: string
           pitch?: number
         }
+        Relationships: []
       }
       wordsdict: {
         Row: {
@@ -43,6 +44,7 @@ export interface Database {
           guild_id?: string
           id?: number
         }
+        Relationships: []
       }
     }
     Views: {
@@ -52,6 +54,9 @@ export interface Database {
       [_ in never]: never
     }
     Enums: {
+      [_ in never]: never
+    }
+    CompositeTypes: {
       [_ in never]: never
     }
   }
